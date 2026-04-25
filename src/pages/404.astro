@@ -1,0 +1,19 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { homePath } from "../lib/routing";
+---
+
+<BaseLayout
+  title="页面不存在"
+  description="你访问的页面不存在，或者已经被移动。"
+  canonicalPath={homePath() + "404.html"}
+>
+  <section class="not-found">
+    <p class="page-intro__eyebrow">404</p>
+    <h1>页面不存在</h1>
+    <p>链接可能已经失效，或者这篇内容还没有公开发布。</p>
+    <p class="not-found__meta">
+      <a href={homePath()}>回到首页</a>
+    </p>
+  </section>
+</BaseLayout>

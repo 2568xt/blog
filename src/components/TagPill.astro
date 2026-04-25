@@ -1,0 +1,13 @@
+---
+import { tagPath } from "../lib/routing";
+
+interface Props {
+  tag: string;
+}
+
+const { tag } = Astro.props;
+---
+
+<a class="tag-pill tag-pill--editorial" href={tagPath(tag)}>
+  #{tag}
+</a>

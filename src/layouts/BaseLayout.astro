@@ -1,0 +1,80 @@
+---
+import { siteConfig } from "../config/site";
+import { archivePath, feedPath, homePath, tagsPath } from "../lib/routing";
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonicalPath?: string;
+}
+
+const {
+  title = siteConfig.siteTitle,
+  description = siteConfig.siteDescription,
+  canonicalPath = Astro.url.pathname,
+} = Astro.props;
+
+const pageTitle =
+  title === siteConfig.siteTitle ? title : `${title} | ${siteConfig.siteTitle}`;
+const canonicalUrl = Astro.site
+  ? new URL(canonicalPath, Astro.site).toString()
+  : undefined;
+const navigation = [
+  { href: homePath(), label: "首页" },
+  { href: archivePath(), label: "归档" },
+  { href: tagsPath(), label: "标签" },
+  { href: feedPath(), label: "RSS" },
+];
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#f3ede4" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
+    <meta property="og:site_name" content={siteConfig.siteTitle} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <link rel="icon" type="image/svg+xml" href={homePath() + "favicon.svg"} />
+    <link rel="alternate" type="application/rss+xml" title={`${siteConfig.siteTitle} RSS`} href={feedPath()} />
+    {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+  </head>
+  <body class="editorial-theme">
+    <header class="site-header site-header--editorial">
+      <div class="site-shell site-header__inner site-header__inner--editorial">
+        <a class="site-brand site-brand--editorial" href={homePath()}>
+          <span class="site-brand__name">{siteConfig.siteTitle}</span>
+          <span class="site-brand__tagline">Writing archive</span>
+        </a>
+        <nav class="site-nav site-nav--editorial" aria-label="主导航">
+          {navigation.map((item) => (
+            <a class="site-nav__link" href={item.href}>{item.label}</a>
+          ))}
+        </nav>
+      </div>
+    </header>
+    <main class="site-main site-main--editorial">
+      <div class="site-shell site-shell--editorial">
+        <slot />
+      </div>
+    </main>
+    <footer class="site-footer site-footer--editorial">
+      <div class="site-shell site-footer__inner site-footer__inner--editorial">
+        <p>{siteConfig.siteDescription}</p>
+        <p>
+          Published with Astro.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

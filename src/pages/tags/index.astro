@@ -1,0 +1,40 @@
+---
+import { getCollection } from "astro:content";
+
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { collectEntryTagSummaries } from "../../lib/posts";
+import { tagPath, tagsPath } from "../../lib/routing";
+
+const tagSummaries = collectEntryTagSummaries(await getCollection("posts"));
+---
+
+<BaseLayout
+  title="标签"
+  description="按主题浏览公开文章。"
+  canonicalPath={tagsPath()}
+>
+  <section class="tags-page tags-page--editorial">
+    <div class="section-heading section-heading--index">
+      <div>
+        <p class="section-heading__eyebrow">Topics</p>
+        <h1 class="tags-page__heading">标签</h1>
+      </div>
+      <span>{tagSummaries.length} 个主题</span>
+    </div>
+
+    {
+      tagSummaries.length > 0 ? (
+        <div class="tags-grid tags-grid--editorial">
+          {tagSummaries.map((summary) => (
+            <a class="tag-pill tag-pill--editorial tag-pill--count" href={tagPath(summary.tag)}>
+              <span>#{summary.tag}</span>
+              <span class="tag-pill__count">{summary.count}</span>
+            </a>
+          ))}
+        </div>
+      ) : (
+        <p class="empty-state">还没有公开标签。</p>
+      )
+    }
+  </section>
+</BaseLayout>

@@ -1,0 +1,55 @@
+---
+import { getCollection } from "astro:content";
+
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import {
+  formatDisplayDate,
+  getPublishedEntries,
+  groupEntriesByYear,
+} from "../../lib/posts";
+import { archivePath, postPath } from "../../lib/routing";
+
+const groupedPosts = groupEntriesByYear(await getCollection("posts"));
+const publishedPosts = getPublishedEntries(await getCollection("posts"));
+---
+
+<BaseLayout
+  title="归档"
+  description="按时间顺序查看全部公开文章。"
+  canonicalPath={archivePath()}
+>
+  <section class="archive-page archive-page--editorial">
+    <div class="section-heading section-heading--index">
+      <div>
+        <p class="section-heading__eyebrow">Archive</p>
+        <h1 class="tag-page__heading">归档</h1>
+      </div>
+      <span>{publishedPosts.length} 篇公开文章</span>
+    </div>
+
+    <div class="archive-groups">
+      {
+        groupedPosts.map((group) => (
+          <section class="archive-group">
+            <div class="section-heading section-heading--index">
+              <h2>{group.year}</h2>
+              <span class="archive-group__count">{group.entries.length} 篇</span>
+            </div>
+            <ul class="archive-list archive-list--editorial">
+              {group.entries.map((post) => (
+                <li class="archive-list__item">
+                  <time class="archive-list__date" datetime={post.data.date.toISOString()}>
+                    {formatDisplayDate(post.data.date)}
+                  </time>
+                  <a class="archive-link" href={postPath(post.id)}>
+                    {post.data.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,93 @@
+---
+import { getCollection, render } from "astro:content";
+
+import TableOfContents from "../../components/TableOfContents.astro";
+import TagPill from "../../components/TagPill.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import {
+  formatDisplayDate,
+  getAdjacentEntries,
+  getPublishedEntries,
+  type PostEntry,
+} from "../../lib/posts";
+import { postPath } from "../../lib/routing";
+
+export async function getStaticPaths() {
+  const posts = getPublishedEntries(await getCollection("posts"));
+
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props as { post: PostEntry };
+const allPosts = getPublishedEntries(await getCollection("posts"));
+const { newer, older } = getAdjacentEntries(allPosts, post.id);
+const { Content, headings } = await render(post);
+---
+
+<BaseLayout
+  title={post.data.title}
+  description={post.data.summary}
+  canonicalPath={postPath(post.id)}
+>
+  <article class="post-page post-page--editorial">
+    <header class="post-hero post-hero--editorial">
+      <p class="post-hero__eyebrow">Essay</p>
+      <div class="post-hero__meta">
+        <time datetime={post.data.date.toISOString()}>
+          {formatDisplayDate(post.data.date)}
+        </time>
+        <span>#{post.id}</span>
+      </div>
+      <h1>{post.data.title}</h1>
+      <p class="post-hero__summary">{post.data.summary}</p>
+      <div class="post-hero__tags post-hero__tags--editorial" aria-label="文章标签">
+        {post.data.tags.map((tag) => <TagPill tag={tag} />)}
+      </div>
+    </header>
+
+    <div class="post-layout post-layout--editorial">
+      <div class="post-content">
+        <div class="prose prose--editorial">
+          <Content />
+        </div>
+
+        <footer class="post-footer post-footer--editorial">
+          <p class="post-footer__caption">继续阅读</p>
+          <nav class="article-pagination article-pagination--editorial" aria-label="相邻文章">
+            <div class="article-pagination__item">
+              <span class="article-pagination__label">较新</span>
+              {
+                newer ? (
+                  <a class="article-pagination__link" href={postPath(newer.id)}>
+                    {newer.data.title}
+                  </a>
+                ) : (
+                  <span class="article-pagination__empty">已经是最新一篇</span>
+                )
+              }
+            </div>
+            <div class="article-pagination__item">
+              <span class="article-pagination__label">较早</span>
+              {
+                older ? (
+                  <a class="article-pagination__link" href={postPath(older.id)}>
+                    {older.data.title}
+                  </a>
+                ) : (
+                  <span class="article-pagination__empty">已经是最早一篇</span>
+                )
+              }
+            </div>
+          </nav>
+        </footer>
+      </div>
+
+      <div class="post-sidebar post-sidebar--editorial">
+        <TableOfContents headings={headings} />
+      </div>
+    </div>
+  </article>
+</BaseLayout>

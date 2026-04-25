@@ -1,0 +1,37 @@
+---
+import { getCollection } from "astro:content";
+
+import PostList from "../../components/PostList.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { collectEntryTagSummaries, getPostsForTag } from "../../lib/posts";
+import { slugifySegment, tagPath } from "../../lib/routing";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("posts");
+
+  return collectEntryTagSummaries(posts).map((summary) => ({
+    params: { tag: slugifySegment(summary.tag) },
+    props: { tag: summary.tag },
+  }));
+}
+
+const { tag } = Astro.props as { tag: string };
+const posts = getPostsForTag(await getCollection("posts"), tag);
+---
+
+<BaseLayout
+  title={`标签：${tag}`}
+  description={`收录与 ${tag} 相关的公开文章。`}
+  canonicalPath={tagPath(tag)}
+>
+  <section class="tag-page tag-page--editorial">
+    <div class="section-heading section-heading--index">
+      <div>
+        <p class="section-heading__eyebrow">Topic archive</p>
+        <h1 class="tag-page__heading">#{tag}</h1>
+      </div>
+      <span class="tag-meta">{posts.length} 篇文章</span>
+    </div>
+    <PostList posts={posts} />
+  </section>
+</BaseLayout>

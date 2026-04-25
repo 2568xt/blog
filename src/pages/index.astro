@@ -1,17 +1,30 @@
 ---
+import { getCollection } from "astro:content";
 
+import PostList from "../components/PostList.astro";
+import { siteConfig } from "../config/site";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getPublishedEntries } from "../lib/posts";
+import { homePath } from "../lib/routing";
+
+const posts = getPublishedEntries(await getCollection("posts"));
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout canonicalPath={homePath()}>
+  <section class="page-intro page-intro--home">
+    <p class="page-intro__eyebrow">Writing archive</p>
+    <h1>{siteConfig.siteTitle}</h1>
+    <p class="page-intro__lead">{siteConfig.siteDescription}</p>
+  </section>
+
+  <section class="home-section">
+    <div class="section-heading section-heading--home">
+      <div>
+        <p class="section-heading__eyebrow">Latest writing</p>
+        <h2>最新文章</h2>
+      </div>
+      <span>{posts.length} 篇已发布</span>
+    </div>
+    <PostList posts={posts} />
+  </section>
+</BaseLayout>

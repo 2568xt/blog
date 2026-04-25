@@ -1,43 +1,32 @@
-# Astro Starter Kit: Minimal
+# 2568xt Blog
 
-```sh
-npm create astro@latest -- --template minimal
+一个基于 Astro 的极简深色技术博客，默认部署到 GitHub Pages 项目站：
+
+- 预期线上地址：`https://2568xt.github.io/blog/`
+- 技术栈：`Astro + Content Collections + Markdown/MDX + GitHub Actions`
+- 内容模型：`title / date / summary / tags / draft / cover`
+
+## 本地开发
+
+```bash
+npm install
+npm run dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## 校验与构建
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+```bash
+npm test
+npm run check
+npm run build
+npm run preview
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## 目录
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+- `src/content/posts/`：文章内容
+- `src/content.config.ts`：内容集合定义
+- `src/layouts/`：页面布局
+- `src/components/`：文章列表、目录等组件
+- `src/lib/`：文章处理和路由工具
+- `.github/workflows/deploy.yml`：GitHub Pages 自动部署

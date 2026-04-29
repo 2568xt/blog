@@ -23,7 +23,8 @@ html {
   scroll-behavior: smooth;
 }
 
-body.editorial-theme {
+body.editorial-theme,
+body.quiet-product-theme {
   margin: 0;
   min-width: 320px;
   font-family:
@@ -33,14 +34,6 @@ body.editorial-theme {
     "Hiragino Sans GB",
     "Microsoft YaHei",
     sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.8;
-}
-
-body.quiet-product-theme {
-  margin: 0;
-  min-width: 320px;
   background: var(--bg);
   color: var(--text);
   line-height: 1.8;
@@ -104,10 +97,11 @@ pre {
   padding: 1.1rem 0 1rem;
 }
 
-.site-header__inner--quiet-product,
-.site-footer__inner--quiet-product {
+.site-header__inner--quiet-product {
   align-items: center;
   justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.1rem 0 1rem;
 }
 
 .site-brand {
@@ -195,6 +189,14 @@ pre {
   font-size: 0.9rem;
 }
 
+.site-footer__inner--quiet-product {
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 0 2.5rem;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
 .page-intro {
   border-bottom: 1px solid var(--border);
 }
@@ -222,6 +224,7 @@ pre {
 }
 
 .page-intro--home h1,
+.page-intro--signal-stream h1,
 .post-hero--editorial h1,
 .not-found h1 {
   margin: 0;
@@ -272,6 +275,7 @@ pre {
 }
 
 .section-heading--home h2,
+.section-heading--stream h2,
 .archive-group h2,
 .tag-page__heading,
 .tags-page__heading {

@@ -5,7 +5,7 @@ import PostList from "../components/PostList.astro";
 import { siteConfig } from "../config/site";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { getPublishedEntries } from "../lib/posts";
-import { homePath } from "../lib/routing";
+import { archivePath, feedPath, homePath } from "../lib/routing";
 
 const posts = getPublishedEntries(await getCollection("posts"));
 ---
@@ -17,8 +17,8 @@ const posts = getPublishedEntries(await getCollection("posts"));
     <p class="page-intro__lead">{siteConfig.siteDescription}</p>
     <div class="home-meta" aria-label="站点概览">
       <span>{posts.length} 篇已发布</span>
-      <a href="/blog/archives/">归档</a>
-      <a href="/blog/rss.xml">RSS</a>
+      <a href={archivePath()}>归档</a>
+      <a href={feedPath()}>RSS</a>
     </div>
   </section>
 

@@ -49,31 +49,29 @@ const navigation = [
     <link rel="alternate" type="application/rss+xml" title={`${siteConfig.siteTitle} RSS`} href={feedPath()} />
     {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
   </head>
-  <body class="editorial-theme">
-    <header class="site-header site-header--editorial">
-      <div class="site-shell site-header__inner site-header__inner--editorial">
-        <a class="site-brand site-brand--editorial" href={homePath()}>
+  <body class="quiet-product-theme">
+    <header class="site-header site-header--quiet-product">
+      <div class="site-shell site-header__inner site-header__inner--quiet-product">
+        <a class="site-brand site-brand--quiet-product" href={homePath()}>
           <span class="site-brand__name">{siteConfig.siteTitle}</span>
-          <span class="site-brand__tagline">Writing archive</span>
+          <span class="site-brand__tagline">Writing system</span>
         </a>
-        <nav class="site-nav site-nav--editorial" aria-label="主导航">
+        <nav class="site-nav site-nav--quiet-product" aria-label="主导航">
           {navigation.map((item) => (
             <a class="site-nav__link" href={item.href}>{item.label}</a>
           ))}
         </nav>
       </div>
     </header>
-    <main class="site-main site-main--editorial">
-      <div class="site-shell site-shell--editorial">
+    <main class="site-main site-main--quiet-product">
+      <div class="site-shell site-shell--quiet-product">
         <slot />
       </div>
     </main>
-    <footer class="site-footer site-footer--editorial">
-      <div class="site-shell site-footer__inner site-footer__inner--editorial">
+    <footer class="site-footer site-footer--quiet-product">
+      <div class="site-shell site-footer__inner site-footer__inner--quiet-product">
         <p>{siteConfig.siteDescription}</p>
-        <p>
-          Published with Astro.
-        </p>
+        <p>Published with Astro.</p>
       </div>
     </footer>
   </body>

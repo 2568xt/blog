@@ -702,6 +702,12 @@ pre {
   padding: 4.25rem 0 0;
 }
 
+.archive-page--quiet-product,
+.tags-page--quiet-product,
+.tag-page--quiet-product {
+  padding: 4rem 0 0;
+}
+
 .archive-groups {
   display: grid;
   gap: 2rem;
@@ -722,7 +728,19 @@ pre {
   border-top: 1px solid var(--border);
 }
 
+.archive-list--quiet-product {
+  border-top: 1px solid var(--border);
+}
+
 .archive-list__item {
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr);
+  gap: 1.25rem;
+  padding: 0.95rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.archive-list__item--quiet-product {
   display: grid;
   grid-template-columns: 7.5rem minmax(0, 1fr);
   gap: 1.25rem;
@@ -745,6 +763,12 @@ pre {
 
 .tags-grid--editorial {
   gap: 0.75rem;
+}
+
+.tags-grid--quiet-product {
+  display: flex;
+  gap: 0.55rem;
+  flex-wrap: wrap;
 }
 
 .tag-pill--count {

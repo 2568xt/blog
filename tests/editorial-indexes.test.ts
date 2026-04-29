@@ -18,4 +18,25 @@ describe("quiet product indexes", () => {
       expect(html).not.toContain("post-list--editorial");
     }
   });
+
+  it("renders archive and tag indexes with quiet product classes", () => {
+    const archive = readBuiltPage("archives/index.html");
+    const tags = readBuiltPage("tags/index.html");
+    const astroTag = readBuiltPage("tags/astro/index.html");
+
+    expect(archive).toContain('class="archive-page archive-page--quiet-product"');
+    expect(archive).toContain('class="archive-list archive-list--quiet-product"');
+    expect(archive).toContain(
+      'class="archive-list__item archive-list__item--quiet-product"',
+    );
+    expect(archive).not.toContain("archive-page--editorial");
+
+    expect(tags).toContain('class="tags-page tags-page--quiet-product"');
+    expect(tags).toContain('class="tags-grid tags-grid--quiet-product"');
+    expect(tags).toContain('class="tag-pill tag-pill--quiet-product tag-pill--count"');
+    expect(tags).not.toContain("tags-page--editorial");
+
+    expect(astroTag).toContain('class="tag-page tag-page--quiet-product"');
+    expect(astroTag).toContain('class="post-list post-list--quiet-product"');
+  });
 });

@@ -15,6 +15,8 @@ describe("quiet product CSS system", () => {
     expect(css).toContain("--text: #f4f1ea;");
     expect(css).toContain("--accent: #f0a94a;");
     expect(css).toContain("body.quiet-product-theme");
+    expect(css).toContain(".prose--quiet-product a");
+    expect(css).toContain("text-underline-offset");
     expect(css).toContain("@media (prefers-reduced-motion: reduce)");
     expect(css).toContain("@media (max-width: 760px)");
     expect(css).not.toContain("--bg: #f3ede4");

@@ -250,6 +250,13 @@ pre {
   color: var(--accent-strong);
 }
 
+.prose--quiet-product a {
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 208, 138, 0.55);
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 1px;
+}
+
 .home-meta a:hover,
 .home-meta a:focus-visible,
 .archive-link:hover,
@@ -262,6 +269,7 @@ pre {
 .prose--quiet-product a:focus-visible {
   color: var(--accent);
   text-decoration: underline;
+  text-decoration-color: currentColor;
 }
 
 .home-section--stream {

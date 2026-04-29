@@ -126,6 +126,14 @@ pre {
   text-transform: uppercase;
 }
 
+.site-header--quiet-product .site-brand__name {
+  color: #f4f1ea;
+}
+
+.site-header--quiet-product .site-brand__tagline {
+  color: rgba(244, 241, 234, 0.58);
+}
+
 .site-nav {
   display: flex;
   align-items: center;
@@ -137,6 +145,11 @@ pre {
 .site-nav a {
   color: var(--text-soft);
   font-size: 0.95rem;
+}
+
+.site-nav--quiet-product .site-nav__link,
+.site-nav--quiet-product a {
+  color: rgba(244, 241, 234, 0.76);
 }
 
 .site-nav a:hover,
@@ -154,6 +167,13 @@ pre {
 .not-found a:hover,
 .not-found a:focus-visible {
   color: var(--accent);
+}
+
+.site-nav--quiet-product .site-nav__link:hover,
+.site-nav--quiet-product .site-nav__link:focus-visible,
+.site-nav--quiet-product a:hover,
+.site-nav--quiet-product a:focus-visible {
+  color: #f4f1ea;
 }
 
 .site-main {

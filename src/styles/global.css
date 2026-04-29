@@ -246,6 +246,7 @@ pre {
 .page-intro--home h1,
 .page-intro--signal-stream h1,
 .post-hero--editorial h1,
+.post-hero--reading-first h1,
 .not-found h1 {
   margin: 0;
   font-family:
@@ -844,12 +845,14 @@ pre {
 }
 
 @media (max-width: 900px) {
-  .post-layout--editorial {
+  .post-layout--editorial,
+  .post-layout--reading-first {
     grid-template-columns: minmax(0, 1fr);
     gap: 2rem;
   }
 
-  .post-sidebar--editorial {
+  .post-sidebar--editorial,
+  .post-sidebar--quiet-product {
     position: static;
   }
 }
@@ -872,11 +875,13 @@ pre {
 
   .page-intro--home h1,
   .post-hero--editorial h1,
+  .post-hero--reading-first h1,
   .not-found h1 {
     font-size: 2.85rem;
   }
 
   .article-pagination--editorial,
+  .article-pagination--quiet-product,
   .archive-list__item,
   .post-row__article {
     grid-template-columns: minmax(0, 1fr);

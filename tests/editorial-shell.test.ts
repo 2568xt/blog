@@ -14,8 +14,10 @@ describe("quiet product shell", () => {
     expect(html).toContain('class="home-meta"');
     expect(html).toContain('class="section-heading section-heading--stream"');
     expect(html).toContain('class="site-footer site-footer--quiet-product"');
+    expect(html).toContain('<meta name="theme-color" content="#0c0f15">');
     expect(html).toContain("关于视觉、模型与代码的简洁笔记。");
     expect(html).not.toContain("site-header--editorial");
     expect(html).not.toContain("page-intro--home");
+    expect(html).not.toContain('<meta name="theme-color" content="#f3ede4">');
   });
 });

@@ -11,10 +11,10 @@ interface Props {
 const { posts } = Astro.props;
 ---
 
-<ol class="post-list post-list--editorial">
+<ol class="post-list post-list--quiet-product">
   {
     posts.map((post) => (
-      <li class="post-row">
+      <li class="post-row post-row--quiet-product">
         <article class="post-row__article">
           <time class="post-row__date" datetime={post.data.date.toISOString()}>
             {formatDisplayDate(post.data.date)}
@@ -24,7 +24,7 @@ const { posts } = Astro.props;
               <a href={postPath(post.id)}>{post.data.title}</a>
             </h2>
             <p class="post-row__summary">{post.data.summary}</p>
-            <div class="tag-list tag-list--editorial" aria-label="文章标签">
+            <div class="tag-list tag-list--quiet-product" aria-label="文章标签">
               {post.data.tags.map((tag) => <TagPill tag={tag} />)}
             </div>
           </div>

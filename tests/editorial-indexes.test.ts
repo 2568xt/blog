@@ -2,24 +2,20 @@ import { describe, expect, it } from "vitest";
 
 import { readBuiltPage } from "./helpers/rendered-html";
 
-describe("editorial indexes", () => {
-  it("renders shared post rows instead of cards on listing pages", () => {
+describe("quiet product indexes", () => {
+  it("renders shared quiet product post streams on listing pages", () => {
     const home = readBuiltPage("index.html");
-    const archive = readBuiltPage("archives/index.html");
-    const tags = readBuiltPage("tags/index.html");
     const astroTag = readBuiltPage("tags/astro/index.html");
 
-    expect(home).toContain('class="post-list post-list--editorial"');
-    expect(home).toContain('class="post-row__date"');
-    expect(home).not.toContain('class="post-card"');
-
-    expect(archive).toContain('class="archive-page archive-page--editorial"');
-    expect(archive).toContain('class="archive-list archive-list--editorial"');
-
-    expect(tags).toContain('class="tags-page tags-page--editorial"');
-    expect(tags).toContain('class="tags-grid tags-grid--editorial"');
-
-    expect(astroTag).toContain('class="tag-page tag-page--editorial"');
-    expect(astroTag).toContain('class="post-list post-list--editorial"');
+    for (const html of [home, astroTag]) {
+      expect(html).toContain('class="post-list post-list--quiet-product"');
+      expect(html).toContain('class="post-row post-row--quiet-product"');
+      expect(html).toContain('class="post-row__article"');
+      expect(html).toContain('class="post-row__date"');
+      expect(html).toContain('class="post-row__body"');
+      expect(html).toContain('class="tag-pill tag-pill--quiet-product"');
+      expect(html).not.toContain('class="post-card"');
+      expect(html).not.toContain("post-list--editorial");
+    }
   });
 });

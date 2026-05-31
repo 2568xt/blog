@@ -10,7 +10,7 @@ tags:
 
 参考来源：[OpenAI Developers: Best practices - Codex](https://developers.openai.com/codex/learn/best-practices)。
 
-这篇不是逐字翻译，而是按中文博客的阅读习惯重写的一版导读。原文最重要的观点其实很简单：不要把 Codex 当成一次性问答工具，而要把它当成一个可以被配置、训练和复盘的工程队友。
+原文最重要的观点其实很简单：不要把 Codex 当成一次性问答工具，而要把它当成一个可以被配置、训练和复盘的工程队友。
 
 ## 先把任务讲清楚
 

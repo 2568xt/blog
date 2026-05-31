@@ -7,7 +7,7 @@ describe("editorial indexes", () => {
     const home = readBuiltPage("index.html");
     const archive = readBuiltPage("archives/index.html");
     const tags = readBuiltPage("tags/index.html");
-    const astroTag = readBuiltPage("tags/astro/index.html");
+    const codexTag = readBuiltPage("tags/codex/index.html");
 
     expect(home).toContain('class="post-list post-list--editorial"');
     expect(home).toContain('class="post-row__date"');
@@ -19,7 +19,7 @@ describe("editorial indexes", () => {
     expect(tags).toContain('class="tags-page tags-page--editorial"');
     expect(tags).toContain('class="tags-grid tags-grid--editorial"');
 
-    expect(astroTag).toContain('class="tag-page tag-page--editorial"');
-    expect(astroTag).toContain('class="post-list post-list--editorial"');
+    expect(codexTag).toContain('class="tag-page tag-page--editorial"');
+    expect(codexTag).toContain('class="post-list post-list--editorial"');
   });
 });

@@ -29,6 +29,7 @@ Keep summaries concise and useful for listing pages and RSS.
 
 ## Writing Style
 
+- Before drafting or revising a post, consult `docs/writing-guidelines.md` for the detailed writing workflow and style rules.
 - Default blog posts should use a personal retrospective style.
 - Prefer explaining why a change was made, what tradeoffs appeared, what went wrong, and what should be done differently next time.
 - Avoid generic tutorial voice unless the user explicitly asks for a step-by-step beginner guide.
@@ -37,11 +38,18 @@ Keep summaries concise and useful for listing pages and RSS.
 - Do not include meta commentary that is unrelated to the topic, such as saying the post is not a literal translation, was rewritten for Chinese readers, or was generated from another writing process.
 - Avoid first-person `我` in posts; use `笔者` or an objective sentence structure instead.
 
+## Collaboration Workflow
+
+- When drafting or revising posts, discuss the work with the user section by section instead of producing a full final draft in one pass.
+- Confirm the topic, outline, and major sections incrementally; incorporate user feedback before moving to the next block.
+- When the user introduces a new recurring norm or workflow preference, ask whether it should be recorded in `AGENTS.md` or a separate project document.
+
 ## Publishing Workflow
 
 - New posts should default to `draft: true`.
 - Do not publish a new post unless the user explicitly approves it.
-- After user approval, remove `draft: true` or set `draft: false`, then run the relevant checks and build before pushing.
+- Each publishing change should be prepared through a pull request; do not push directly to `main` unless the user explicitly requests it.
+- After user approval, remove `draft: true` or set `draft: false`, then run the relevant checks and build before creating or updating the publishing pull request.
 
 ## Common Commands
 

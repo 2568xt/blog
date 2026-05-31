@@ -6,7 +6,6 @@ tags:
   - ai-agent
   - eval
   - anthropic
-draft: true
 ---
 
 参考来源：[Anthropic Engineering: Demystifying evals for AI agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)。

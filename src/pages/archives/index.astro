@@ -18,7 +18,7 @@ const publishedPosts = getPublishedEntries(await getCollection("posts"));
   description="按时间顺序查看全部公开文章。"
   canonicalPath={archivePath()}
 >
-  <section class="archive-page archive-page--editorial">
+  <section class="archive-page archive-page--quiet-product">
     <div class="section-heading section-heading--index">
       <div>
         <p class="section-heading__eyebrow">Archive</p>
@@ -35,9 +35,9 @@ const publishedPosts = getPublishedEntries(await getCollection("posts"));
               <h2>{group.year}</h2>
               <span class="archive-group__count">{group.entries.length} 篇</span>
             </div>
-            <ul class="archive-list archive-list--editorial">
+            <ul class="archive-list archive-list--quiet-product">
               {group.entries.map((post) => (
-                <li class="archive-list__item">
+                <li class="archive-list__item archive-list__item--quiet-product">
                   <time class="archive-list__date" datetime={post.data.date.toISOString()}>
                     {formatDisplayDate(post.data.date)}
                   </time>

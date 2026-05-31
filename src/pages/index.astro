@@ -5,25 +5,29 @@ import PostList from "../components/PostList.astro";
 import { siteConfig } from "../config/site";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { getPublishedEntries } from "../lib/posts";
-import { homePath } from "../lib/routing";
+import { archivePath, feedPath, homePath } from "../lib/routing";
 
 const posts = getPublishedEntries(await getCollection("posts"));
 ---
 
 <BaseLayout canonicalPath={homePath()}>
-  <section class="page-intro page-intro--home">
-    <p class="page-intro__eyebrow">Writing archive</p>
+  <section class="page-intro page-intro--signal-stream">
+    <p class="page-intro__eyebrow">Personal writing</p>
     <h1>{siteConfig.siteTitle}</h1>
     <p class="page-intro__lead">{siteConfig.siteDescription}</p>
+    <div class="home-meta" aria-label="站点概览">
+      <span>{posts.length} 篇已发布</span>
+      <a href={archivePath()}>归档</a>
+      <a href={feedPath()}>RSS</a>
+    </div>
   </section>
 
-  <section class="home-section">
-    <div class="section-heading section-heading--home">
+  <section class="home-section home-section--stream">
+    <div class="section-heading section-heading--stream">
       <div>
         <p class="section-heading__eyebrow">Latest writing</p>
         <h2>最新文章</h2>
       </div>
-      <span>{posts.length} 篇已发布</span>
     </div>
     <PostList posts={posts} />
   </section>

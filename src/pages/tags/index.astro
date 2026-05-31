@@ -13,7 +13,7 @@ const tagSummaries = collectEntryTagSummaries(await getCollection("posts"));
   description="按主题浏览公开文章。"
   canonicalPath={tagsPath()}
 >
-  <section class="tags-page tags-page--editorial">
+  <section class="tags-page tags-page--quiet-product">
     <div class="section-heading section-heading--index">
       <div>
         <p class="section-heading__eyebrow">Topics</p>
@@ -24,9 +24,9 @@ const tagSummaries = collectEntryTagSummaries(await getCollection("posts"));
 
     {
       tagSummaries.length > 0 ? (
-        <div class="tags-grid tags-grid--editorial">
+        <div class="tags-grid tags-grid--quiet-product">
           {tagSummaries.map((summary) => (
-            <a class="tag-pill tag-pill--editorial tag-pill--count" href={tagPath(summary.tag)}>
+            <a class="tag-pill tag-pill--quiet-product tag-pill--count" href={tagPath(summary.tag)}>
               <span>#{summary.tag}</span>
               <span class="tag-pill__count">{summary.count}</span>
             </a>

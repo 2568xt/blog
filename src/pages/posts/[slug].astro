@@ -32,8 +32,8 @@ const { Content, headings } = await render(post);
   description={post.data.summary}
   canonicalPath={postPath(post.id)}
 >
-  <article class="post-page post-page--editorial">
-    <header class="post-hero post-hero--editorial">
+  <article class="post-page post-page--quiet-product">
+    <header class="post-hero post-hero--reading-first">
       <p class="post-hero__eyebrow">Essay</p>
       <div class="post-hero__meta">
         <time datetime={post.data.date.toISOString()}>
@@ -43,20 +43,20 @@ const { Content, headings } = await render(post);
       </div>
       <h1>{post.data.title}</h1>
       <p class="post-hero__summary">{post.data.summary}</p>
-      <div class="post-hero__tags post-hero__tags--editorial" aria-label="文章标签">
+      <div class="post-hero__tags post-hero__tags--quiet-product" aria-label="文章标签">
         {post.data.tags.map((tag) => <TagPill tag={tag} />)}
       </div>
     </header>
 
-    <div class="post-layout post-layout--editorial">
+    <div class="post-layout post-layout--reading-first">
       <div class="post-content">
-        <div class="prose prose--editorial">
+        <div class="prose prose--quiet-product">
           <Content />
         </div>
 
-        <footer class="post-footer post-footer--editorial">
+        <footer class="post-footer post-footer--quiet-product">
           <p class="post-footer__caption">继续阅读</p>
-          <nav class="article-pagination article-pagination--editorial" aria-label="相邻文章">
+          <nav class="article-pagination article-pagination--quiet-product" aria-label="相邻文章">
             <div class="article-pagination__item">
               <span class="article-pagination__label">较新</span>
               {
@@ -85,7 +85,7 @@ const { Content, headings } = await render(post);
         </footer>
       </div>
 
-      <div class="post-sidebar post-sidebar--editorial">
+      <div class="post-sidebar post-sidebar--quiet-product">
         <TableOfContents headings={headings} />
       </div>
     </div>

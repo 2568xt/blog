@@ -81,6 +81,12 @@ Keep summaries concise and useful for listing pages and RSS.
 - Prefer `rg` or `rg --files` for repository search.
 - Use existing Astro/content patterns before adding new abstractions.
 
+## Task Completion
+
+- After each independent task is complete, create a git commit by default unless the user explicitly asks not to.
+- Before committing, review the changed files and summarize the verification that was run or why it was skipped.
+- Keep commits scoped to the completed task; do not include unrelated local changes or generated outputs.
+
 ## Verification
 
 - For content-only changes, run `npm run check` and `npm run build` when practical.

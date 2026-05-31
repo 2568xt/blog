@@ -1,19 +1,19 @@
 :root {
-  color-scheme: dark;
-  --bg: #0c0f15;
-  --bg-soft: #10141c;
-  --surface: #151a23;
-  --surface-soft: #1b212c;
-  --surface-warm: rgba(240, 169, 74, 0.08);
-  --border: rgba(169, 176, 188, 0.16);
-  --border-strong: rgba(240, 169, 74, 0.34);
-  --text: #f4f1ea;
-  --text-soft: #c6cbd3;
-  --text-muted: #7d8694;
-  --accent: #f0a94a;
-  --accent-strong: #ffd08a;
-  --code-bg: #101722;
-  --focus-ring: rgba(240, 169, 74, 0.42);
+  color-scheme: light;
+  --bg: #f3ede4;
+  --bg-soft: #faf6ef;
+  --surface: #fffdf9;
+  --surface-soft: #f7f1e8;
+  --surface-warm: rgba(122, 91, 51, 0.07);
+  --border: rgba(78, 61, 39, 0.16);
+  --border-strong: rgba(78, 61, 39, 0.28);
+  --text: #1f1a17;
+  --text-soft: #55483d;
+  --text-muted: #7c6d5d;
+  --accent: #7a5b33;
+  --accent-strong: #5b4223;
+  --code-bg: #f6f0e8;
+  --focus-ring: rgba(122, 91, 51, 0.28);
 }
 
 * {
@@ -28,9 +28,7 @@ html {
 body.quiet-product-theme {
   margin: 0;
   min-width: 320px;
-  background:
-    linear-gradient(180deg, rgba(240, 169, 74, 0.055), transparent 16rem),
-    var(--bg);
+  background: var(--bg);
   color: var(--text);
   font-family:
     Inter,
@@ -75,7 +73,7 @@ pre {
 }
 
 ::selection {
-  background: rgba(240, 169, 74, 0.24);
+  background: rgba(122, 91, 51, 0.14);
   color: var(--text);
 }
 
@@ -92,7 +90,7 @@ pre {
 
 .site-header--quiet-product {
   border-bottom: 1px solid var(--border);
-  background: rgba(12, 15, 21, 0.9);
+  background: rgba(243, 237, 228, 0.92);
   backdrop-filter: blur(16px);
 }
 
@@ -172,7 +170,7 @@ pre {
 .site-footer,
 .site-footer--quiet-product {
   border-top: 1px solid var(--border);
-  background: rgba(16, 20, 28, 0.46);
+  background: rgba(250, 246, 239, 0.72);
 }
 
 .site-footer__inner,
@@ -252,7 +250,7 @@ pre {
 
 .prose--quiet-product a {
   text-decoration: underline;
-  text-decoration-color: rgba(255, 208, 138, 0.55);
+  text-decoration-color: rgba(122, 91, 51, 0.32);
   text-underline-offset: 0.18em;
   text-decoration-thickness: 1px;
 }
@@ -369,7 +367,7 @@ pre {
 .post-row__title a:focus-visible {
   color: var(--accent-strong);
   text-decoration: underline;
-  text-decoration-color: rgba(255, 208, 138, 0.5);
+  text-decoration-color: rgba(122, 91, 51, 0.42);
 }
 
 .post-row__summary {
@@ -405,7 +403,7 @@ pre {
   padding: 0.18rem 0.58rem;
   border: 1px solid var(--border);
   border-radius: 999px;
-  background: rgba(244, 241, 234, 0.035);
+  background: rgba(255, 253, 249, 0.78);
   color: var(--text-soft);
   font-size: 0.82rem;
   line-height: 1.25;
@@ -608,7 +606,7 @@ pre {
 
 .prose--quiet-product :not(pre) > code {
   padding: 0.12rem 0.35rem;
-  border: 1px solid rgba(169, 176, 188, 0.1);
+  border: 1px solid rgba(78, 61, 39, 0.12);
   border-radius: 6px;
   background: var(--surface-soft);
   color: var(--text);

@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="660" viewBox="0 0 1120 660" role="img" aria-labelledby="title desc">
+  <title id="title">Agent eval 结构图</title>
+  <desc id="desc">一轮 Agent eval 从 task 开始，Agent harness 驱动模型调用工具并修改环境，trial 产生 transcript 和 outcome，再由 grader 判定结果。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M2 2 L10 6 L2 10 Z" fill="#7a5b33" />
+    </marker>
+    <style>
+      .bg { fill: #fffdf9; }
+      .panel { fill: #faf6ef; stroke: rgba(78, 61, 39, 0.22); stroke-width: 2; }
+      .box { fill: #ffffff; stroke: rgba(78, 61, 39, 0.28); stroke-width: 2; }
+      .box-soft { fill: #f7f1e8; stroke: rgba(78, 61, 39, 0.25); stroke-width: 2; }
+      .accent { fill: #efe3d2; stroke: #7a5b33; stroke-width: 2.5; }
+      .line { stroke: #7a5b33; stroke-width: 2.5; fill: none; marker-end: url(#arrow); }
+      .dash { stroke: rgba(122, 91, 51, 0.68); stroke-width: 2; fill: none; stroke-dasharray: 7 7; marker-end: url(#arrow); }
+      .title { font: 700 30px "PingFang SC", "Microsoft YaHei", sans-serif; fill: #1f1a17; }
+      .label { font: 700 23px "PingFang SC", "Microsoft YaHei", sans-serif; fill: #1f1a17; }
+      .en { font: 600 16px ui-monospace, SFMono-Regular, monospace; fill: #7a5b33; }
+      .body { font: 400 17px "PingFang SC", "Microsoft YaHei", sans-serif; fill: #55483d; }
+      .small { font: 400 15px "PingFang SC", "Microsoft YaHei", sans-serif; fill: #7c6d5d; }
+    </style>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1120" height="660" rx="18" />
+  <text class="title" x="56" y="64">一轮 Agent eval 先看清这几个对象</text>
+  <text class="body" x="56" y="98">不要先问“分数多少”，先问：给了什么任务、跑了哪次尝试、留下什么过程、环境最后变成什么。</text>
+
+  <rect class="panel" x="54" y="132" width="1012" height="370" rx="18" />
+
+  <rect class="accent" x="92" y="192" width="168" height="118" rx="12" />
+  <text class="label" x="124" y="232">任务</text>
+  <text class="en" x="124" y="258">task</text>
+  <text class="body" x="124" y="286">输入与成功标准</text>
+
+  <rect class="box" x="330" y="170" width="228" height="162" rx="12" />
+  <text class="label" x="370" y="214">Agent 运行框架</text>
+  <text class="en" x="370" y="240">agent harness</text>
+  <text class="body" x="370" y="272">组织模型、工具调用</text>
+  <text class="body" x="370" y="298">和多轮交互</text>
+
+  <rect class="box-soft" x="632" y="156" width="180" height="86" rx="12" />
+  <text class="label" x="668" y="192">过程记录</text>
+  <text class="en" x="668" y="218">transcript</text>
+
+  <rect class="box-soft" x="632" y="278" width="180" height="86" rx="12" />
+  <text class="label" x="676" y="314">最终状态</text>
+  <text class="en" x="676" y="340">outcome</text>
+
+  <rect class="accent" x="886" y="208" width="142" height="118" rx="12" />
+  <text class="label" x="918" y="248">判分器</text>
+  <text class="en" x="918" y="274">grader</text>
+  <text class="body" x="918" y="302">检查是否成功</text>
+
+  <path class="line" d="M260 251 H318" />
+  <path class="line" d="M558 235 C586 226 600 214 620 205" />
+  <path class="line" d="M558 280 C586 292 602 306 620 319" />
+  <path class="line" d="M812 199 C846 208 862 229 876 250" />
+  <path class="line" d="M812 321 C848 314 866 295 878 276" />
+
+  <path class="dash" d="M444 332 C444 392 474 426 530 426 H914 C948 426 958 388 958 338" />
+  <text class="small" x="552" y="455">trial：同一道 task 的一次运行；同一 task 可以跑多次 trial 来观察稳定性。</text>
+
+  <rect class="box" x="94" y="536" width="936" height="76" rx="12" />
+  <text class="body" x="124" y="570">例子：Agent 说“航班订好了”只是 transcript 里的一句话；数据库里是否真的出现 reservation，才是 outcome。</text>
+  <text class="small" x="124" y="595">reservation 不是通用术语，只是订票场景里的“预订记录”。</text>
+</svg>

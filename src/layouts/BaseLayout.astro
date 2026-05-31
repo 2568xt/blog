@@ -1,6 +1,6 @@
 ---
 import { siteConfig } from "../config/site";
-import { archivePath, feedPath, homePath, tagsPath } from "../lib/routing";
+import { homePath, tagsPath } from "../lib/routing";
 import "../styles/global.css";
 
 interface Props {
@@ -22,9 +22,7 @@ const canonicalUrl = Astro.site
   : undefined;
 const navigation = [
   { href: homePath(), label: "首页" },
-  { href: archivePath(), label: "归档" },
   { href: tagsPath(), label: "标签" },
-  { href: feedPath(), label: "RSS" },
 ];
 ---
 
@@ -47,7 +45,6 @@ const navigation = [
     <meta name="twitter:description" content={description} />
     <link rel="icon" type="image/png" sizes="512x512" href={homePath() + "favicon.png"} />
     <link rel="shortcut icon" href={homePath() + "favicon.ico"} />
-    <link rel="alternate" type="application/rss+xml" title={`${siteConfig.siteTitle} RSS`} href={feedPath()} />
     {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
   </head>
   <body class="quiet-product-theme">
@@ -71,7 +68,6 @@ const navigation = [
     </main>
     <footer class="site-footer site-footer--quiet-product">
       <div class="site-shell site-footer__inner site-footer__inner--quiet-product">
-        <p>{siteConfig.siteDescription}</p>
         <p>Published with Astro.</p>
       </div>
     </footer>

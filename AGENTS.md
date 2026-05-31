@@ -48,8 +48,7 @@ Keep summaries concise and useful for listing pages and RSS.
 
 - New posts should default to `draft: true`.
 - Do not publish a new post unless the user explicitly approves it.
-- Each publishing change should be prepared through a pull request; do not push directly to `main` unless the user explicitly requests it.
-- After user approval, remove `draft: true` or set `draft: false`, then run the relevant checks and build before creating or updating the publishing pull request.
+- After user approval, remove `draft: true` or set `draft: false`, then run the relevant checks and build before publishing.
 
 ## Common Commands
 

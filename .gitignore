@@ -28,3 +28,6 @@ pnpm-debug.log*
 
 # local git worktrees
 .worktrees/
+
+# local Compound Engineering config
+.compound-engineering/*.local.yaml

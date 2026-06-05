@@ -42,6 +42,7 @@ Keep summaries concise and useful for listing pages and RSS.
 
 - When drafting or revising posts, discuss the work with the user section by section instead of producing a full final draft in one pass.
 - Confirm the topic, outline, and major sections incrementally; incorporate user feedback before moving to the next block.
+- If a user-provided source link cannot be accessed directly, report that immediately and ask the user whether to provide the material or approve alternate sources. Do not silently substitute cached pages, reposts, summaries, or search results.
 - When the user introduces a new recurring norm or workflow preference, ask whether it should be recorded in `AGENTS.md` or a separate project document.
 
 ## Publishing Workflow

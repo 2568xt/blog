@@ -6,7 +6,6 @@ tags:
   - ai-agent
   - codex
   - workflow
-draft: true
 ---
 
 参考来源：[Matt Van Horn: Every Agentic Engineering Hack I Know (June 2026)](https://x.com/mvanhorn/article/2061877533885473181)。

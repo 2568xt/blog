@@ -50,6 +50,7 @@ Keep summaries concise and useful for listing pages and RSS.
 - New posts should default to `draft: true`.
 - Do not publish a new post unless the user explicitly approves it.
 - After user approval, remove `draft: true` or set `draft: false`, then run the relevant checks and build before publishing.
+- After a PR is merged, delete the corresponding remote branch and any fully merged local branch. If a local branch contains unmerged commits, do not force-delete it; report the extra commits first and preserve the work.
 
 ## Common Commands
 

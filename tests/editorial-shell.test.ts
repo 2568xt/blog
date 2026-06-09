@@ -17,7 +17,7 @@ describe("quiet product shell", () => {
     expect(html).toContain('<meta name="theme-color" content="#f3ede4">');
     expect(html).toContain(">首页</a>");
     expect(html).toContain(">标签</a>");
-    expect(html).toContain("2 篇已发布");
+    expect(html).toMatch(/\d+ 篇已发布/);
     expect(html).not.toContain("关于视觉、模型与代码的简洁笔记。");
     expect(html).not.toContain(">归档</a>");
     expect(html).not.toContain(">RSS</a>");

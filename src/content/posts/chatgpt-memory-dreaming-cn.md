@@ -7,7 +7,6 @@ tags:
   - memory
   - openai
   - context-engineering
-draft: true
 ---
 
 参考来源：[OpenAI: Dreaming: Better memory for a more helpful ChatGPT](https://openai.com/index/chatgpt-memory-dreaming/)，以及 [Memory FAQ](https://help.openai.com/en/articles/8590148-personalization-and-data-controls-faq)。

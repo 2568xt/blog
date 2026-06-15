@@ -1,7 +1,7 @@
 ---
 title: "feat: Add repo-local blog writing publish skill"
 type: "feat"
-status: "active"
+status: "completed"
 date: "2026-06-15"
 ---
 

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Blog Writing Publish Workflow"
+  short_description: "Blog writing, Proof review, and publishing"
+  default_prompt: "Use $blog-writing-publish-workflow to draft, review, publish, and merge a blog post in this repo."

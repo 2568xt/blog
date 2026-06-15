@@ -1,68 +1,68 @@
-# Writing And Proof Review Workflow
+# 写作与 Proof 审稿流程
 
-Use this reference when drafting, revising, translating, adapting, or reviewing a blog post in this repository.
+在本仓库中起草、改写、翻译、转述或审阅博客文章时使用这份参考。
 
-## Before Writing
+## 写作前
 
-Read `AGENTS.md` and `docs/writing-guidelines.md`. Inspect existing posts in `src/content/posts/` when tone, frontmatter, or structure is uncertain.
+先读取 `AGENTS.md` 和 `docs/writing-guidelines.md`。当语气、frontmatter 或结构不确定时，检查 `src/content/posts/` 里的既有文章。
 
-For a new post:
+新建文章时：
 
-- Put the file under `src/content/posts/`.
-- Add `draft: true` by default.
-- Keep `summary` concise enough for listing pages and RSS.
-- Keep tags accurate and restrained.
+- 文件放在 `src/content/posts/` 下。
+- 默认加入 `draft: true`。
+- `summary` 要足够短，能用于列表页和 RSS。
+- `tags` 要准确克制。
 
-If the post is based on external material:
+如果文章基于外部材料：
 
-- Verify the source link is accessible before relying on it.
-- Keep the source link for reader lookup.
-- Cover the source structure and paragraph progression unless the user explicitly asks for a different structure.
-- Translate, rewrite, or merge paragraphs as needed, but keep every major source paragraph represented in Chinese.
-- Avoid repeated paragraph subjects like `原文`, `作者`, or `文章` once the source link has already been given.
-- Do not add process meta such as "this is not a literal translation" or "rewritten for Chinese readers."
+- 依赖来源前，先确认来源链接可访问。
+- 保留来源链接，方便读者回查。
+- 默认覆盖来源结构和段落推进，除非用户明确要求改结构。
+- 可以翻译、转述或合并段落，但来源里的每个主要段落都要有中文去向。
+- 来源链接已经给出后，避免反复用 `原文`、`作者` 或 `文章` 做段落主语。
+- 不写“这不是直译”“为中文读者改写”这类写作过程说明。
 
-## Voice
+## 语气
 
-Write like a personal technical essay, not a report or generic tutorial.
+写得像个人技术随笔，而不是报告或泛教程。
 
-- Open with a concrete engineering or everyday example when the topic allows it.
-- Prefer concrete commands, errors, paths, decisions, failure modes, and tradeoffs over generic claims.
-- Avoid first-person `我`; use `笔者` sparingly or rewrite into objective phrasing.
-- Use tables when two or more options, stages, systems, or tradeoffs need comparison.
-- Let the ending land on a boundary, tradeoff, failure mode, or operational judgment instead of a template takeaway.
+- 主题允许时，用一个具体工程或生活例子开头。
+- 多写命令、报错、路径、决策、失败方式和取舍，少写空泛判断。
+- 避免第一人称 `我`；少量使用 `笔者`，或改成客观句式。
+- 出现两个及以上方案、阶段、系统或取舍时，优先考虑用表格。
+- 结尾落在边界、取舍、失败模式或工程判断上，不写模板化 takeaway。
 
-## Collaboration
+## 协作方式
 
-Move section by section for drafting and major revision:
+起草和大改默认按小节推进：
 
-1. Confirm the topic, reader, and thesis.
-2. Confirm the outline or source-structure mapping.
-3. Draft or revise one section at a time.
-4. Incorporate user feedback before moving to the next section.
+1. 确认主题、读者和核心判断。
+2. 确认提纲或来源结构映射。
+3. 每次起草或改写一个小节。
+4. 吸收用户反馈后再进入下一节。
 
-If the user asks for a full-pass rewrite or translation, do the full pass, but still preserve the repo style and source-structure rules.
+如果用户要求整篇重写、整篇翻译或完整通稿，就做完整处理，但仍遵守仓库语气和来源结构规则。
 
-## Proof Review
+## Proof 审稿
 
-Use Proof for whole-draft review after a full draft exists. Do not launch Proof for early outline or single-section work unless the user asks.
+完整草稿存在后，再用 Proof 做整篇审稿。不要为了早期提纲或单节内容启动 Proof，除非用户明确要求。
 
-To start review, use the repo script:
+启动审稿：
 
 ```bash
 npm run proof:review -- <slug-or-repo-relative-post-path>
 ```
 
-Then share the returned Proof URL with the user. Do not write that URL or any Proof token/secret into tracked files.
+把返回的 Proof URL 发给用户。不要把这个 URL 或任何 Proof token/secret 写入已跟踪文件。
 
-When comments are available:
+有批注后：
 
-- Read and group Proof comment threads by the affected section.
-- Apply accepted edits back to the local Markdown file under `src/content/posts/`.
-- Reply in Proof when a thread has been handled if the available tool supports it.
-- Keep unresolved or rejected suggestions visible in the final response.
-- Treat the local Markdown file as canonical after sync.
+- 按受影响的小节读取并归类 Proof 评论线程。
+- 将接受的修改同步回 `src/content/posts/` 下的本地 Markdown。
+- 如果可用工具支持，在 Proof 线程里回复已处理的评论。
+- 最终回复里说明仍未解决或未采纳的建议。
+- 同步后仍以本地 Markdown 为准。
 
-## Verification
+## 验证
 
-For content-only changes, run `npm run check` and `npm run build` when practical. If the change touches routing, rendering, helpers, package scripts, or tests, also run `npm test`.
+内容变更在可行时运行 `npm run check` 和 `npm run build`。如果改动涉及路由、渲染、辅助函数、package script 或测试，还要运行 `npm test`。

@@ -1,43 +1,43 @@
-# Publish Workflow
+# 发布流程
 
-Use this reference only after the user explicitly approves publishing a post.
+只有在用户明确批准发布文章后，才使用这份参考。
 
-## Approval Gate
+## 批准门槛
 
-Publishing means removing `draft: true` or setting `draft: false` on a post. Do not do that until the user has clearly approved publication.
+发布意味着移除 `draft: true` 或设置 `draft: false`。在用户清楚批准发布之前，不要这么做。
 
-If the user only asks for review, editing, Proof, or "ready soon," keep the post as a draft.
+如果用户只是要求审稿、改稿、Proof 或“差不多准备好了”，继续保持草稿状态。
 
-## Pre-Publish Checks
+## 发布前检查
 
-Before opening a publish PR:
+打开发布 PR 前：
 
-- Confirm the changed post has the expected title, date, summary, tags, and source links.
-- Confirm no Proof token URL, owner secret, review state, generated output, cache, local env file, or `dist/` file is staged.
-- Run `npm run check` and `npm run build` for content-only publication.
-- Run `npm test` as well when publishing work includes route, layout, content helper, package script, or test changes.
+- 确认文章的 title、date、summary、tags 和来源链接符合预期。
+- 确认没有已暂存的 Proof token URL、owner secret、审稿状态、生成产物、缓存、本地环境文件或 `dist/`。
+- 内容发布运行 `npm run check` 和 `npm run build`。
+- 如果发布工作包含路由、布局、内容辅助函数、package script 或测试改动，也运行 `npm test`。
 
-If a check fails, fix the failure before creating or merging the PR unless the user explicitly redirects.
+如果检查失败，先修复失败再创建或合并 PR，除非用户明确改变方向。
 
-## PR Flow
+## PR 流程
 
-Publish through a pull request unless the user explicitly asks for direct push to `main`.
+除非用户明确要求直接推到 `main`，否则通过 pull request 发布。
 
-After checks pass:
+检查通过后：
 
-1. Commit the scoped changes.
-2. Push the branch.
-3. Open a PR with a concise description of the post or workflow change and the verification results.
-4. Wait for required PR checks when they exist.
-5. If the PR scope is clean and checks pass, merge it without asking the user to manually review the PR.
+1. 提交 scope 内的改动。
+2. 推送分支。
+3. 创建 PR，描述文章或 workflow 改动，并列出验证结果。
+4. 如果存在 required PR checks，等待它们通过。
+5. 如果 PR 变更范围干净且检查通过，不再要求用户手动审 PR，直接合并。
 
-This self-merge rule does not remove the publish approval gate. Approval happens before removing the draft flag; self-merge happens after the PR is ready.
+自合并规则不会移除发布批准门槛。批准发生在移除 draft 标记之前；自合并发生在 PR 已经准备好之后。
 
-## After Merge
+## 合并后
 
-After the PR is merged:
+PR 合并后：
 
-- Delete the remote branch.
-- Delete the local branch only if it is fully merged or patch-equivalent.
-- If local commits appear unmerged, preserve the branch and report the extra commits instead of force-deleting.
-- Return to `main` and sync it with the remote when practical.
+- 删除远端分支。
+- 只有本地分支已完全合并或补丁等价时，才删除本地分支。
+- 如果本地提交看起来未合并，保留分支并报告额外提交，不要强制删除。
+- 可行时回到 `main` 并同步远端。

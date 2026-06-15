@@ -1,34 +1,34 @@
 ---
 name: blog-writing-publish-workflow
-description: "Use for blog work inside this repository: drafting or revising posts in src/content/posts, source-based reading notes, whole-draft Proof review, ingesting review comments, publishing approved posts through PRs, self-merging clean PRs, and branch cleanup. Do not use for daily news/digest screening automation."
+description: "用于本仓库的博客工作：起草或改写 src/content/posts 下的文章，处理基于外部来源的阅读笔记，发起整篇 Proof 审稿，吸收审稿批注，按 PR 发布已获批准的文章，PR 检查通过且变更范围干净后自行合并，并清理分支。不要用于每日新闻或每日摘要筛选自动化。"
 ---
 
-# Blog Writing Publish Workflow
+# 博客写作发布工作流
 
-## Core Rule
+## 核心规则
 
-Work from this repository's current files before acting. Read `AGENTS.md` and `docs/writing-guidelines.md` before drafting, revising, reviewing, or publishing a post.
+行动前先读取当前仓库文件。起草、改写、审稿或发布文章前，先读 `AGENTS.md` 和 `docs/writing-guidelines.md`。
 
-Keep `src/content/posts/` as the source of truth. Treat Proof as a review surface, not as the canonical content store.
+始终把 `src/content/posts/` 当作内容的权威来源。Proof 只是审稿界面，不是正式内容来源。
 
-## Workflow Router
+## 工作流路由
 
-Choose the matching workflow:
+按任务选择对应流程：
 
-- **Draft or revise a post:** Read `references/writing-workflow.md`, then work section by section unless the user asks for a full-pass edit.
-- **Prepare a whole-draft review:** Read `references/writing-workflow.md`, keep the post as a draft, and use Proof only after a full draft exists.
-- **Publish an approved post:** Read `references/publish-workflow.md`, verify explicit publish approval, run the repo checks, open a PR, and self-merge only after the PR is clean.
-- **Daily digest or news screening:** Stop using this skill. That workflow is separate and should remain outside this skill.
+- **起草或改写文章：**读取 `references/writing-workflow.md`，默认按小节推进；只有用户要求整篇处理时，才做完整通稿。
+- **准备整篇审稿：**读取 `references/writing-workflow.md`，保持文章草稿状态，只在完整草稿存在后使用 Proof。
+- **发布已批准文章：**读取 `references/publish-workflow.md`，确认用户已明确批准发布，运行仓库检查，创建 PR，并只在 PR 变更范围干净后自行合并。
+- **每日摘要或新闻筛选：**停止使用本 skill。该流程是独立工作流，不属于这里。
 
-## Operating Constraints
+## 操作约束
 
-- Keep new posts as `draft: true` until the user explicitly approves publishing.
-- Preserve source links for external-material posts, but do not add meta commentary about the writing process.
-- Do not commit Proof token URLs, access tokens, owner secrets, review-session state, `dist/`, caches, local env files, or generated outputs.
-- Prefer narrow edits to the post, docs, or workflow files named by the task.
-- If a source link cannot be accessed, say so and ask for the source material or permission to use another source.
+- 新文章默认保留 `draft: true`，直到用户明确批准发布。
+- 外部材料文章保留来源链接，但不要加入与主题无关的写作过程说明。
+- 不要提交 Proof token URL、access token、owner secret、审稿状态、`dist/`、缓存、本地环境文件或生成产物。
+- 优先做窄改动，只动任务涉及的文章、文档或 workflow 文件。
+- 如果来源链接无法访问，立即说明，并询问用户提供材料或批准使用其他来源。
 
-## References
+## 参考文件
 
-- `references/writing-workflow.md`: writing style, source-based article handling, section-by-section collaboration, Proof review, and comment ingestion.
-- `references/publish-workflow.md`: approval gate, verification, PR creation, self-merge, and branch cleanup.
+- `references/writing-workflow.md`：写作风格、基于来源的文章处理、逐节协作、Proof 审稿和批注吸收。
+- `references/publish-workflow.md`：发布批准门槛、验证、PR 创建、自合并和分支清理。

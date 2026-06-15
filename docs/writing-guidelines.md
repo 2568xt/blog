@@ -31,6 +31,8 @@
 ## 审稿流程
 
 - 长文草稿默认先保持 `draft: true`，再进入 Proof 网页审稿；不要为了审稿提前发布或生成公开路由。
+- 如果本次任务已经产出或改完一篇完整长草稿，默认立即运行 `npm run proof:review -- <slug-or-repo-relative-post-path>`，把 Proof URL 发给用户审阅；不要只把整篇 Markdown 贴回聊天里让用户审。
+- 只有提纲、片段、小节草稿、早期方向讨论，或用户明确要求跳过 Proof 时，才不启动 Proof。
 - Proof 默认用于成稿后的整篇通读和集中批注；结构确认和早期语气校准仍优先在聊天和本地 Markdown 中完成。
 - 使用 `npm run proof:review -- <slug-or-repo-relative-post-path>` 把本地草稿上传到 Proof，并把返回的 Proof URL 发给审稿人。
 - 审稿意见优先留在 Proof 的评论线程里；agent 读取评论后，在 Proof 线程中回复、处理可接受修改，再把审过的 Markdown 同步回 `src/content/posts/`。

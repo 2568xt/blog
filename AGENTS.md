@@ -54,6 +54,7 @@ Keep summaries concise and useful for listing pages and RSS.
 ## Draft Review Workflow
 
 - For long draft review, prefer Proof as the web review surface instead of asking the user to read raw Markdown in chat.
+- When a task creates or updates a complete long draft, start a Proof review before asking the user to review it, unless the user explicitly asks to skip Proof or the draft is still only an outline/partial section.
 - Start a Proof review with `npm run proof:review -- <slug-or-repo-relative-post-path>`, then share the returned Proof URL with the user.
 - Treat Proof as the collaboration surface and `src/content/posts/` as the local source of truth after sync.
 - Do not commit Proof token URLs, access tokens, owner secrets, or review-session state.

@@ -47,15 +47,17 @@
 
 ## Proof 审稿
 
-完整草稿存在后，再用 Proof 做整篇审稿。不要为了早期提纲或单节内容启动 Proof，除非用户明确要求。
+完整草稿存在后，默认用 Proof 做整篇审稿。不要为了早期提纲或单节内容启动 Proof，除非用户明确要求。
 
-启动审稿：
+如果本次任务已经产出或改完一篇完整长草稿，在最终回复前运行：
 
 ```bash
 npm run proof:review -- <slug-or-repo-relative-post-path>
 ```
 
 把返回的 Proof URL 发给用户。不要把这个 URL 或任何 Proof token/secret 写入已跟踪文件。
+
+只有提纲、片段、小节草稿、早期方向讨论，或用户明确要求跳过 Proof 时，才把聊天或本地 Markdown 作为主要审阅面。
 
 有批注后：
 

@@ -1,4 +1,4 @@
 interface:
-  display_name: "Blog Writing Publish Workflow"
-  short_description: "Blog writing, Proof review, and publishing"
-  default_prompt: "Use $blog-writing-publish-workflow to draft, review, publish, and merge a blog post in this repo."
+  display_name: "博客写作发布工作流"
+  short_description: "博客写作、Proof 审稿和发布"
+  default_prompt: "使用 $blog-writing-publish-workflow 在这个仓库里起草、审稿、发布并合并一篇博客。"

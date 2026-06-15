@@ -15,7 +15,7 @@ description: "用于本仓库的博客工作：起草或改写 src/content/posts
 
 按任务选择对应流程：
 
-- **起草或改写文章：**读取 `references/writing-workflow.md`，根据任务选择整篇处理或按小节推进。
+- **起草或改写文章：**读取 `references/writing-workflow.md`，根据任务选择整篇处理或按小节推进；如果本次产出或改完完整长草稿，默认启动 Proof 审稿并分享 URL。
 - **准备整篇审稿：**读取 `references/writing-workflow.md`，保持文章草稿状态，只在完整草稿存在后使用 Proof。
 - **发布已批准文章：**读取 `references/publish-workflow.md`，确认用户已明确批准发布，运行仓库检查，创建 PR，并只在 PR 变更范围干净后自行合并。
 - **每日摘要或新闻筛选：**停止使用本 skill。该流程是独立工作流，不属于这里。
@@ -23,6 +23,7 @@ description: "用于本仓库的博客工作：起草或改写 src/content/posts
 ## 操作约束
 
 - 新文章默认保留 `draft: true`，直到用户明确批准发布。
+- 完整长草稿的默认交付面是 Proof URL，不是聊天里的整篇 Markdown，除非用户明确要求跳过 Proof。
 - 外部材料文章保留来源链接，但不要加入与主题无关的写作过程说明。
 - 不要提交 Proof token URL、access token、owner secret、审稿状态、`dist/`、缓存、本地环境文件或生成产物。
 - 优先做窄改动，只动任务涉及的文章、文档或 workflow 文件。

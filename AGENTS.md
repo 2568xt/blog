@@ -12,6 +12,11 @@
 - The stack is Astro, Content Collections, Markdown/MDX, Vitest, and GitHub Pages.
 - Published posts live in `src/content/posts/`.
 
+## Project Skill
+
+- For blog drafting, source-based reading notes, Proof review, publishing, PR self-merge, and branch cleanup, use the repo-local `blog-writing-publish-workflow` skill at `.codex/skills/blog-writing-publish-workflow/SKILL.md`.
+- Do not use that skill for daily news/digest screening automation; keep that workflow separate.
+
 ## Content Model
 
 Post frontmatter follows this shape:
@@ -45,11 +50,20 @@ Keep summaries concise and useful for listing pages and RSS.
 - If a user-provided source link cannot be accessed directly, report that immediately and ask the user whether to provide the material or approve alternate sources. Do not silently substitute cached pages, reposts, summaries, or search results.
 - When the user introduces a new recurring norm or workflow preference, ask whether it should be recorded in `AGENTS.md` or a separate project document.
 
+## Draft Review Workflow
+
+- For long draft review, prefer Proof as the web review surface instead of asking the user to read raw Markdown in chat.
+- Start a Proof review with `npm run proof:review -- <slug-or-repo-relative-post-path>`, then share the returned Proof URL with the user.
+- Treat Proof as the collaboration surface and `src/content/posts/` as the local source of truth after sync.
+- Do not commit Proof token URLs, access tokens, owner secrets, or review-session state.
+
 ## Publishing Workflow
 
 - New posts should default to `draft: true`.
 - Do not publish a new post unless the user explicitly approves it.
 - After user approval, remove `draft: true` or set `draft: false`, then run the relevant checks and build before publishing.
+- Publish through a pull request unless the user explicitly asks for direct push to `main`.
+- After creating a publish PR, Codex may merge it without asking the user to manually review the PR when checks pass and the PR scope is clean.
 - After a PR is merged, delete the corresponding remote branch and any fully merged local branch. If a local branch contains unmerged commits, do not force-delete it; report the extra commits first and preserve the work.
 
 ## Common Commands
@@ -60,6 +74,7 @@ Keep summaries concise and useful for listing pages and RSS.
 - Run Astro checks: `npm run check`
 - Build static site: `npm run build`
 - Preview built site: `npm run preview`
+- Start Proof review: `npm run proof:review -- <slug-or-repo-relative-post-path>`
 
 ## Repository Layout
 

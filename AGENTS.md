@@ -42,6 +42,7 @@ Keep summaries concise and useful for listing pages and RSS.
 - Keep reference links when a post is based on external material.
 - Do not include meta commentary that is unrelated to the topic, such as saying the post is not a literal translation, was rewritten for Chinese readers, or was generated from another writing process.
 - Avoid first-person `我` in posts; use `笔者` or an objective sentence structure instead.
+- When rewriting or translating source-based material, remove translationese and make the Chinese read naturally and smoothly.
 
 ## Collaboration Workflow
 

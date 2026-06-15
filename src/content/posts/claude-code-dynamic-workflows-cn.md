@@ -6,7 +6,6 @@ tags:
   - ai-agent
   - claude-code
   - workflow
-draft: true
 ---
 
 参考来源：[Claude: A harness for every task: dynamic workflows in Claude Code](https://claude.com/blog/a-harness-for-every-task-dynamic-workflows-in-claude-code)。

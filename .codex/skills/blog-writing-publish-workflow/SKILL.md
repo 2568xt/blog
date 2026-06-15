@@ -15,7 +15,7 @@ description: "用于本仓库的博客工作：起草或改写 src/content/posts
 
 按任务选择对应流程：
 
-- **起草或改写文章：**读取 `references/writing-workflow.md`，默认按小节推进；只有用户要求整篇处理时，才做完整通稿。
+- **起草或改写文章：**读取 `references/writing-workflow.md`，根据任务选择整篇处理或按小节推进。
 - **准备整篇审稿：**读取 `references/writing-workflow.md`，保持文章草稿状态，只在完整草稿存在后使用 Proof。
 - **发布已批准文章：**读取 `references/publish-workflow.md`，确认用户已明确批准发布，运行仓库检查，创建 PR，并只在 PR 变更范围干净后自行合并。
 - **每日摘要或新闻筛选：**停止使用本 skill。该流程是独立工作流，不属于这里。
@@ -30,5 +30,5 @@ description: "用于本仓库的博客工作：起草或改写 src/content/posts
 
 ## 参考文件
 
-- `references/writing-workflow.md`：写作风格、基于来源的文章处理、逐节协作、Proof 审稿和批注吸收。
+- `references/writing-workflow.md`：写作风格、基于来源的文章处理、协作粒度选择、Proof 审稿和批注吸收。
 - `references/publish-workflow.md`：发布批准门槛、验证、PR 创建、自合并和分支清理。

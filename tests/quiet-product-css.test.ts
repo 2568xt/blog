@@ -10,10 +10,10 @@ describe("quiet product CSS system", () => {
     const css = readFileSync(cssPath, "utf8");
 
     expect(css).toContain("color-scheme: light;");
-    expect(css).toContain("--bg: #f3ede4;");
-    expect(css).toContain("--surface: #fffdf9;");
-    expect(css).toContain("--text: #1f1a17;");
-    expect(css).toContain("--accent: #7a5b33;");
+    expect(css).toContain("--bg: #fafafa;");
+    expect(css).toContain("--surface: #ffffff;");
+    expect(css).toContain("--text: #191c23;");
+    expect(css).toContain("--accent: #244dd2;");
     expect(css).toContain("--code-bg: #101722;");
     expect(css).toContain("--code-text: #d8e2ec;");
     expect(css).toContain("body.quiet-product-theme");

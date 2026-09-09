@@ -1,7 +1,7 @@
 export const siteConfig = {
-  siteTitle: "2568xt",
-  siteDescription: "2568xt",
+  siteTitle: "Rin",
+  siteDescription: "Rin personal notes",
   siteUrl: "https://2568xt.github.io",
   basePath: "/blog",
-  author: "2568xt",
+  author: "Rin",
 };

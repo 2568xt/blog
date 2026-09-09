@@ -1,22 +1,22 @@
 :root {
   color-scheme: light;
-  --bg: #f3ede4;
-  --bg-soft: #faf6ef;
-  --surface: #fffdf9;
-  --surface-soft: #f7f1e8;
-  --surface-warm: rgba(122, 91, 51, 0.07);
-  --border: rgba(78, 61, 39, 0.16);
-  --border-strong: rgba(78, 61, 39, 0.28);
-  --text: #1f1a17;
-  --text-soft: #55483d;
-  --text-muted: #7c6d5d;
-  --accent: #7a5b33;
-  --accent-strong: #5b4223;
+  --bg: #fafafa;
+  --bg-soft: #f5f6f8;
+  --surface: #ffffff;
+  --surface-soft: #f0f2f5;
+  --surface-warm: rgba(36, 77, 210, 0.05);
+  --border: rgba(24, 29, 40, 0.12);
+  --border-strong: rgba(24, 29, 40, 0.24);
+  --text: #191c23;
+  --text-soft: #4c5361;
+  --text-muted: #687080;
+  --accent: #244dd2;
+  --accent-strong: #1c3dab;
   --code-bg: #101722;
   --code-border: rgba(169, 193, 215, 0.22);
   --code-text: #d8e2ec;
   --code-shadow: rgba(16, 23, 34, 0.16);
-  --focus-ring: rgba(122, 91, 51, 0.28);
+  --focus-ring: #244dd2;
 }
 
 * {
@@ -76,12 +76,12 @@ pre {
 }
 
 ::selection {
-  background: rgba(122, 91, 51, 0.14);
+  background: rgba(36, 77, 210, 0.14);
   color: var(--text);
 }
 
 .site-shell {
-  width: min(100% - 2rem, 72rem);
+  width: min(100% - 4rem, 68rem);
   margin: 0 auto;
 }
 
@@ -93,7 +93,7 @@ pre {
 
 .site-header--quiet-product {
   border-bottom: 1px solid var(--border);
-  background: rgba(243, 237, 228, 0.92);
+  background: rgba(250, 250, 250, 0.94);
   backdrop-filter: blur(16px);
 }
 
@@ -173,7 +173,7 @@ pre {
 .site-footer,
 .site-footer--quiet-product {
   border-top: 1px solid var(--border);
-  background: rgba(250, 246, 239, 0.72);
+  background: transparent;
 }
 
 .site-footer__inner,
@@ -253,7 +253,7 @@ pre {
 
 .prose--quiet-product a {
   text-decoration: underline;
-  text-decoration-color: rgba(122, 91, 51, 0.32);
+  text-decoration-color: rgba(36, 77, 210, 0.32);
   text-underline-offset: 0.18em;
   text-decoration-thickness: 1px;
 }
@@ -354,9 +354,9 @@ pre {
   margin: 0;
   color: var(--text);
   font-size: 1.45rem;
-  font-weight: 720;
+  font-weight: 650;
   letter-spacing: 0;
-  line-height: 1.18;
+  line-height: 1.5;
 }
 
 .post-row__title a {
@@ -370,7 +370,7 @@ pre {
 .post-row__title a:focus-visible {
   color: var(--accent-strong);
   text-decoration: underline;
-  text-decoration-color: rgba(122, 91, 51, 0.42);
+  text-decoration-color: rgba(36, 77, 210, 0.42);
 }
 
 .post-row__summary {
@@ -406,7 +406,7 @@ pre {
   padding: 0.18rem 0.58rem;
   border: 1px solid var(--border);
   border-radius: 999px;
-  background: rgba(255, 253, 249, 0.78);
+  background: transparent;
   color: var(--text-soft);
   font-size: 0.82rem;
   line-height: 1.25;
@@ -609,7 +609,7 @@ pre {
 
 .prose--quiet-product :not(pre) > code {
   padding: 0.12rem 0.35rem;
-  border: 1px solid rgba(78, 61, 39, 0.12);
+  border: 1px solid rgba(24, 29, 40, 0.12);
   border-radius: 6px;
   background: var(--surface-soft);
   color: var(--text);
@@ -787,7 +787,7 @@ pre {
 
 @media (max-width: 760px) {
   .site-shell {
-    width: min(100% - 1.25rem, 72rem);
+    width: min(100% - 2.5rem, 68rem);
   }
 
   .site-header__inner--quiet-product,
@@ -860,4 +860,27 @@ pre {
     scroll-behavior: auto !important;
     transition-duration: 0.001ms !important;
   }
+}
+
+/* Shared identity and keyboard navigation. */
+.skip-link {
+  position: fixed;
+  top: -5rem;
+  left: 1rem;
+  z-index: 100;
+  padding: 0.6rem 1rem;
+  background: var(--text);
+  color: var(--surface);
+}
+.skip-link:focus { top: 1rem; }
+.site-brand__name { font-family: ui-monospace, "SFMono-Regular", monospace; letter-spacing: -0.04em; }
+.site-brand__tagline { font-size: 0.75rem; font-weight: 400; letter-spacing: 0.03em; text-transform: none; }
+.site-nav__link[aria-current="page"] { color: var(--accent); }
+.site-footer__links { display: flex; gap: 1.5rem; }
+.site-footer a:hover { color: var(--accent); text-decoration: underline; }
+@media (max-width: 760px) {
+  .site-header__inner--quiet-product { flex-direction: row; align-items: center; justify-content: space-between; }
+  .site-brand { min-width: 0; }
+  .site-nav { gap: 0.7rem; }
+  .site-nav__link { padding: 0.4rem 0.2rem; }
 }

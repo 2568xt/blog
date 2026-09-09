@@ -7,12 +7,14 @@ interface Props {
   title?: string;
   description?: string;
   canonicalPath?: string;
+  homeTheme?: boolean;
 }
 
 const {
   title = siteConfig.siteTitle,
   description = siteConfig.siteDescription,
   canonicalPath = Astro.url.pathname,
+  homeTheme = false,
 } = Astro.props;
 
 const pageTitle =
@@ -32,7 +34,7 @@ const navigation = [
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="theme-color" content="#f3ede4" />
+    <meta name="theme-color" content={homeTheme ? "#ffffff" : "#fafafa"} />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <meta property="og:type" content="website" />
@@ -47,28 +49,29 @@ const navigation = [
     <link rel="shortcut icon" href={homePath() + "favicon.ico"} />
     {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
   </head>
-  <body class="quiet-product-theme">
+  <body class:list={["quiet-product-theme", { "home-theme": homeTheme }]}>
+    <a class="skip-link" href="#main-content">跳至正文</a>
     <header class="site-header site-header--quiet-product">
       <div class="site-shell site-header__inner site-header__inner--quiet-product">
         <a class="site-brand site-brand--quiet-product" href={homePath()}>
-          <span class="site-brand__name">{siteConfig.siteTitle}</span>
-          <span class="site-brand__tagline">Writing system</span>
+          <span class="site-brand__name">{homeTheme ? "Notes" : siteConfig.siteTitle}</span>
+          {!homeTheme && <span class="site-brand__tagline">Notes</span>}
         </a>
         <nav class="site-nav site-nav--quiet-product" aria-label="主导航">
           {navigation.map((item) => (
-            <a class="site-nav__link" href={item.href}>{item.label}</a>
+            <a class="site-nav__link" href={item.href} aria-current={Astro.url.pathname === item.href ? "page" : undefined}>{item.label}</a>
           ))}
         </nav>
       </div>
     </header>
-    <main class="site-main site-main--quiet-product">
+    <main id="main-content" tabindex="-1" class="site-main site-main--quiet-product">
       <div class="site-shell site-shell--quiet-product">
         <slot />
       </div>
     </main>
     <footer class="site-footer site-footer--quiet-product">
       <div class="site-shell site-footer__inner site-footer__inner--quiet-product">
-        <p>Published with Astro.</p>
+        <p>© {new Date().getFullYear()}</p>
       </div>
     </footer>
   </body>

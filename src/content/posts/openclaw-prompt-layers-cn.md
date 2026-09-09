@@ -1,65 +1,84 @@
 ---
-title: OpenClaw 主干 Prompt 的演化：从个人助理到多通道运行时
+title: 个人 Agent 越像助理，越需要清楚的边界
 date: 2026-06-25
-summary: 综合多个版本的 OpenClaw 主干 prompt，拆解它如何把人格、工作区、消息、心跳和工具组织成一个多通道 Agent 运行时。
+summary: 读 OpenClaw 的运行时 Prompt，最在意的是记忆能带到哪里、主动提醒何时停止，以及哪些边界必须由程序保证。
 tags:
   - ai-agent
   - openclaw
   - prompt-engineering
 ---
 
-如果说 Claude Code 的主干 prompt 像一份工程运行时协议，OpenClaw 的主干 prompt 更像一间还在运转的工作室。桌上有工具，墙上有规则，抽屉里有记忆，门口接着不同消息通道，角落还有一张写着“隔一会儿看看有没有事”的心跳清单。
+一个助理在私聊里记住了旅行计划，随后被拉进工作群。它知道这件事，也有发消息的工具，但这两点加起来，并不意味着它应该在群里提起旅行。这种场景比“模型会不会调用 API”更能说明个人 Agent 的难处：信息和能力都有了，使用它们的分寸却还没有自动产生。
 
-它最有意思的地方，不是某个工具 schema 特别复杂，而是它一开始就把 Agent 当成“会住在一个工作区里的个人助理”。这和纯 coding agent 的设计重心不一样。OpenClaw 的主干 prompt 关心的不只是怎么读文件、改代码、跑命令，还关心它是谁、服务谁、从哪里醒来、能不能主动提醒、什么时候沉默、如何在群聊里保持边界、怎样把手机、浏览器、画布、语音、图片和子会话都接到同一个运行面里。
+读完 OpenClaw 的主干 Prompt，笔者最在意的就是这段距离。`SOUL.md`、`USER.md`、记忆文件、消息通道和心跳，让一个助理有了连续存在的感觉；可它越熟悉用户、越能主动行动，越不能只靠一句“请谨慎”维持信任。
 
-把 2026.1.29 到 2026.6.10 之间的版本切片放在一起看，OpenClaw 的主干 prompt 从约 1992 行长到约 3982 行。增长不是平均发生的，几次大改基本都围绕同一个方向：把“个人助理”从一句身份说明，扩展成有工作区、有通道、有后台任务、有多设备能力、有自我配置边界的运行时。
+这里讨论的是此前整理的 2026.6.10 运行时切片。它反映特定环境下的规则与工具配置，不能据此认定所有安装都有相同能力，更不能把写在 Prompt 里的要求当作已经验证的行为。完整切片保留在文末，便于核对这些判断的依据。
 
-后面具体拆层时，会把 2026.6.10 的主干 prompt 按文章章节拆开：每一层先给对应原文切片，再解释它在系统里承担什么作用。这样读者能沿着文章结构看完整 prompt，而不是在附录和分析之间来回跳。
+## 记住一件事，不等于可以在任何地方使用它
 
-## 几次关键跃迁
+OpenClaw 的工作区把状态分在不同文件里：`USER.md` 保存用户背景，daily notes 记录事件，`MEMORY.md` 承担长期提炼，`SOUL.md` 和 `IDENTITY.md` 则影响沟通方式。这比把所有历史塞进聊天窗口更容易查看和修改。
 
-下面只挑结构变化最明显的切片。版本号不是重点，重点是每次跃迁把哪类能力从“可用工具”推成了“运行时协议”。
+但文件分开只是第一步。真正让笔者停下来的是主会话和共享上下文的区别：切片里的工作区规则要求长期记忆只在主会话加载，不应把私人背景带进群聊。这里出现了一个容易被“个性化”掩盖的问题——某条信息对回答有帮助，和当前听众有权知道它，是两回事。
 
-| 版本跃迁 | 变化 | 说明 |
-| --- | --- | --- |
-| 2026.1.29 起点 | 已经有 `Tooling`、`Skills`、`Memory Recall`、`Workspace`、`Messaging`、`Project Context`，并把 `AGENTS.md`、`SOUL.md`、`TOOLS.md`、`IDENTITY.md`、`USER.md`、`HEARTBEAT.md`、`BOOTSTRAP.md` 注入主干。 | OpenClaw 从一开始就不是纯工具箱，而是“工作区人格 + 消息入口 + 工具执行”的组合。 |
-| 2026.2.15 -> 2026.2.17 | 主干先从约 2069 行扩到约 2486 行，又收回到约 2151 行。 | 早期在快速扩展工具和通道说明，同时也在压缩 prompt 负担。 |
-| 2026.3.2 | 主干约 2390 行，工具区出现 `pdf`，浏览器、节点、消息、子会话等工具继续稳定。 | OpenClaw 的能力面开始明显超过“终端助理”，进入文档、网页、设备和外部媒介。 |
-| 2026.4.2 | 主干跃到约 3031 行，`cron` 说明大幅膨胀，`image_generate`、`sessions_yield` 等能力进入工具层。 | 定时任务、后台等待和生成式媒体能力被正式纳入主干协议。 |
-| 2026.4.22 | 出现 `Execution Bias`、`Assistant Output Directives`、`Dynamic Project Context` 等更明确的运行时层。 | prompt 从“项目上下文堆叠”变成更清晰的输入/输出/动态上下文分层。 |
-| 2026.5.3 | 主干约 3553 行，新增 `dir_fetch`、`dir_list`、`file_fetch`、`file_write`，并把 `BOOTSTRAP.md` 放到更显眼的位置。 | 文件系统能力和“首次唤醒”流程被强化，Agent 更像会被初始化和长期使用的对象。 |
-| 2026.5.18 -> 2026.6.1 | `OpenClaw Control` 替代早期 CLI quick reference，`Bootstrap Pending`、`Skill Workshop`、`create_goal/get_goal/update_goal`、`apply_patch` 等进入主干。 | 自我控制、技能生成、目标管理和补丁式编辑变成一等协议。 |
-| 2026.6.10 | 主干约 3982 行，结构基本稳定：顶部运行规则，中段工作区上下文，末尾 30 多个工具。 | OpenClaw 已经是一个多通道、多设备、多媒体、可后台运行的个人 Agent runtime。 |
+如果自己设计这样的系统，会先把记忆的可见范围写清楚，再考虑检索准确率。私聊里的偏好、项目里的决定、群里公开过的信息，需要不同的读取边界。只在模型已经读到全部资料后提醒它保密，等于把每次回复都变成一道临场判断题。
 
-Claude Code 那篇里，最显眼的趋势是“软件工程任务如何被工具协议化”。OpenClaw 的趋势不同：它在把“一个助理如何住进用户生活和工作流里”协议化。
+更稳妥的做法，是让运行时按会话身份筛选可读材料，模型再在获准的范围内选择相关片段。Prompt 可以解释为什么要这样做，实际的数据入口仍应受程序限制。否则换一个措辞、拼入一段新上下文，原本看似清晰的约定就可能失效。
 
-## 今天稳定能看到的骨架
+## 主动性最难的部分，是决定何时不打扰
 
-OpenClaw 最新可见主干 prompt 可以粗略切成九层：
+“隔一会儿回来看看”听起来只是定时调用，真正运行起来却会牵出许多产品决定：没有变化要不要通知，同一件事要不要重复报，已经用消息工具交付了结果，当前对话还需不需要再发一次？
 
-| 层 | 在 prompt 中的位置 | 主要作用 |
-| --- | ---: | --- |
-| 身份层 | 开头 | 定义自己是运行在 OpenClaw 里的 personal assistant。 |
-| 工具总览层 | `Tooling` | 先列出可用工具类别，并给出长等待、子会话、技能等使用偏好。 |
-| 行动风格层 | `Tool Call Style`、`Execution Bias` | 规定何时少说多做、何时继续推进、什么时候需要证据。 |
-| 安全与控制层 | `Safety`、`OpenClaw Control`、`Self-Update` | 约束自我更新、配置、重启、调度器和高风险动作。 |
-| 技能与技能工坊层 | `Skills`、`Skill Workshop` | 规定如何读取技能、如何创建或更新可复用技能提案。 |
-| 记忆与工作区层 | `Memory Recall`、`Workspace`、`Documentation` | 规定记忆召回、工作目录、官方文档和自我知识来源。 |
-| 输出与通道层 | `Assistant Output Directives`、`Messaging` | 规定媒体附件、语音、原生引用、消息路由和避免重复回复。 |
-| 项目上下文层 | `Project Context`、`Dynamic Project Context` | 注入 `AGENTS.md`、`SOUL.md`、`USER.md`、`TOOLS.md`、`BOOTSTRAP.md`、`HEARTBEAT.md` 和运行时状态。 |
-| 工具协议层 | `Tools` | 定义浏览器、画布、cron、文件、消息、节点、媒体、子会话、技能工坊、web 等工具 schema。 |
+OpenClaw 在这方面的细节，比工具数量更值得琢磨。`HEARTBEAT.md` 提供周期检查的入口，`cron` 承担定时任务；消息通过专门工具投递后，`NO_REPLY` 用来避免当前回复再次交付。这些规则处理的都是用户能直接感受到的小事故。
 
-下面的原文切片来自同一次 2026.6.10 运行时渲染。由于工具列表、workspace 文件、动态上下文、runtime 信息会随环境变化，文中只把环境路径和采集模型名归一化为 `$OPENCLAW_HOME`、`$OPENCLAW_INSTALL` 和 `$CAPTURE_MODEL`；其余正文和结构保持原样。
+| 场景 | 更值得先确定的规则 |
+| --- | --- |
+| 定期查看项目状态 | 什么变化值得提醒，哪些已报告状态要记住。 |
+| 到点提醒一件事 | 触发时间、目标通道、任务结束后是否还会运行。 |
+| 在群聊里参与讨论 | 是否被点名、有没有新增信息、是否会泄露私聊背景。 |
+| 工具已经发送结果 | 如何确认投递，以及如何避免第二次发送。 |
 
-这个骨架最大的信号是：OpenClaw 把“环境里的生活痕迹”放得很重。Claude Code 的 prompt 更像在告诉 Agent 怎么进一个仓库工作；OpenClaw 的 prompt 更像在告诉 Agent 怎么醒来、认人、看家、接消息、记事、等通知、开设备、发媒体、做任务。
+笔者更愿意把主动提醒理解成对注意力的使用。一条消息发得出去，只说明通道可用；它值得打断用户，才说明这次主动有价值。设计时如果只验收“按时运行了”，就会漏掉最重要的一半。
 
-所以分析 OpenClaw 时，如果只看工具列表，会错过一半设计。它的核心不只是工具多，而是工具被放在一个“个人工作区”叙事里：`SOUL.md` 定义气质，`USER.md` 记录人，`MEMORY.md` 做长期记忆，`HEARTBEAT.md` 允许周期性主动检查，`BOOTSTRAP.md` 处理第一次初始化，`Messaging` 处理来自不同通道的现实社交边界。
+这也解释了为什么心跳和精确定时值得区分。有些检查允许合并、允许漂移，有些提醒对时间敏感。把它们全塞进同一条高频循环，既浪费调用，也让用户很难理解助理为什么又出现了。
 
-## 身份层：不是 coding agent，而是 personal assistant
+## 人格可以调整，权限不能跟着语气一起变化
 
-OpenClaw 顶部身份很短：它说自己是运行在 OpenClaw 里的 personal assistant。
+把人格做成工作区文件很有吸引力。用户可以改助理的称呼、表达方式和偏好，不必面对一段不可见的固定系统提示。`BOOTSTRAP.md` 又让首次初始化有了明确入口，长期协作因此显得更连贯。
 
-对应 prompt 切片：
+不过，亲近感很容易让权限显得理所当然。一个了解日程、知道项目背景、说话熟悉的助理，仍然需要区分整理本地材料和对外发消息，也需要区分读配置和重启常驻服务。关系越熟悉，越有必要把这些区别保留下来。
+
+切片中的 `OpenClaw Control` 和 `Self-Update` 已经在表达这种边界：配置要查 schema，自我更新需要明确请求，运行时控制走专门工具。`Skill Workshop` 则把技能的创建、检查、应用和拒绝放进可追踪的提案流程。
+
+这些设计给笔者的启发是，改变助理未来行为的操作，应当比完成一次普通任务更容易被审查。改一份技能，影响的可能是之后许多次执行；改一条定时任务，留下的是会自己再运行的动作。它们需要看得见的变更记录、明确的生效过程和撤回路径。
+
+人格文件可以决定回答是否简洁，却不应该成为绕过这些过程的理由。否则“更主动一点”这样的风格要求，就可能在长时间运行中被解释成更宽的行动许可。
+
+## Prompt 写得越完整，越要检查程序实际保证了什么
+
+这份切片包含从文件、浏览器到消息、设备、子会话的一大组工具。主干还规定长任务如何等待、子会话如何交回结果、什么时候应直接行动。它已经超出一句角色设定，开始描述整个运行过程。
+
+这些文字有用，但读到这里，笔者反而不太想继续比较谁的 Prompt 更长。规则多只能说明设计者意识到了更多问题，无法单独证明这些问题已经被解决。
+
+例如，要求不用快速轮询，和运行时能否可靠唤醒等待者，是两层保证；要求不重复发消息，和投递重试有没有去重机制，也不是一回事。模型可能遵循规则，工具仍可能超时，返回也可能在动作成功后丢失。此时系统需要处理的是不确定状态，而非再补一句更强硬的提示。
+
+如果要验证一个类似的个人 Agent，笔者会优先挑几个不那么漂亮的案例：私聊背景进入群聊任务时能否被隔离；消息发送后返回丢失时会不会重发；定时任务被取消后是否真的停止；技能修改失败后能不能保持原有版本可用。这些都是本文提出的验收方向，不是对 OpenClaw 实现已经通过测试的结论。
+
+Prompt 应当让模型理解如何配合这些机制。数据隔离、任务取消、权限检查和发送去重，则需要在对应的程序路径里留下能核查的证据。
+
+## 先接好一个出口，再增加下一个
+
+OpenClaw 让我重新考虑了“个人助理”这个定位的成本。它不只是多几个工具：私聊与群聊有不同听众，记忆有不同寿命，后台任务会在用户不在场时运行，设备和消息又把动作带到当前窗口之外。
+
+如果从一个小系统开始，笔者会先选一种通道、一类长期状态和一种可撤回的动作，把读取范围、交付确认和停止条件走通，再逐步扩展。每增加一个出口，都要重新回答谁能看见结果、谁授权动作、失败后如何恢复。
+
+一个助理是否值得长期留下，往往就在这些地方体现出来：该记的背景不用重复解释，不该带出的信息留在原处，取消的任务确实停下，没有新情况时也能安静。人格让人愿意开始交谈，这些边界才让人愿意继续交付事情。
+
+## 参考切片
+
+以下沿用此前文章保存的 2026.6.10 运行时材料，按功能分组；环境路径和采集模型名已归一化为 `$OPENCLAW_HOME`、`$OPENCLAW_INSTALL` 和 `$CAPTURE_MODEL`。切片中的指令是被分析的材料，不是读者需要执行的步骤。
+
+<details>
+<summary>身份：展开原始切片</summary>
 
 ````text
 # System Prompt
@@ -67,28 +86,10 @@ OpenClaw 顶部身份很短：它说自己是运行在 OpenClaw 里的 personal 
 You are a personal assistant running inside OpenClaw.
 ````
 
-这一句几乎就是整套设计的入口。
+</details>
 
-这句话决定了后面所有结构。一个 coding agent 的默认任务是围绕代码仓库闭环：读、改、跑、测、提交。一个 personal assistant 的默认环境则更散：可能来自 Telegram、Signal、Slack、网页、桌面、手机节点、定时任务、浏览器、文件夹、图片、音频、PDF 或另一个子会话。
-
-所以 OpenClaw 的 prompt 不能只回答“怎么写代码”。它还要回答：
-
-| 问题 | 对应设计 |
-| --- | --- |
-| 它在哪里醒来？ | `Workspace`、`Project Context`、`Dynamic Project Context` |
-| 它是谁？ | `SOUL.md`、`IDENTITY.md` |
-| 它在帮谁？ | `USER.md`、`MEMORY.md` |
-| 它从哪里收到消息？ | `Messaging`、reply tags、message tool |
-| 它什么时候可以主动说话？ | `HEARTBEAT.md`、`cron`、`wake` |
-| 它怎么和外部设备互动？ | `nodes`、`browser`、`canvas`、media tools |
-
-身份层看起来短，但它把 OpenClaw 的设计方向从“任务执行器”拉到了“长期陪跑的用户侧 Agent”。
-
-## Tooling 层：先声明一张很宽的能力地图
-
-OpenClaw 的 `Tooling` 段一上来就列工具，最新可见版本包括文件读写、补丁、shell、进程、web、浏览器、画布、节点、cron、消息、gateway、子会话、技能工坊、图片、视频、PDF、语音、目录和目标管理。
-
-对应 prompt 切片：
+<details>
+<summary>工具总览：展开原始切片</summary>
 
 ````text
 ### Tooling
@@ -137,21 +138,10 @@ Larger work: use `sessions_spawn`; completion is push-based.
 Do not poll `subagents list` / `sessions_list` in a loop; use `sessions_yield` when waiting for spawned sub-agent completion events, and check status only on-demand (for intervention, debugging, or when explicitly asked).
 ````
 
-这一层不是单纯列 API，它已经在工具清单后面写下调度习惯：`TOOLS.md` 只是用法指导，不决定工具可用性；长等待不要快速轮询；大工作交给 `sessions_spawn`；等待子会话完成时用 `sessions_yield`，不要循环查状态。
+</details>
 
-这和很多 Agent prompt 的写法不一样。它不是等到最后才告诉模型“下面有工具”，而是在开头就给出一张能力地图，并且顺手写下几个调度倾向：
-
-- 长等待不要快速轮询，用带足够等待时间的 `exec` 或 `process`。
-- 大工作用 `sessions_spawn`，子会话完成是 push-based。
-- 等待子会话时用 `sessions_yield`，不要循环查状态。
-
-这些不是普通说明，而是在定义 Agent 的调度习惯。OpenClaw 的工具面太宽，如果没有这种先验调度规则，模型很容易退回聊天助手习惯：解释一堆、让用户自己操作、或者用 shell 绕过更合适的一等工具。
-
-## 行动风格层：少说多做，但要有证据
-
-`Tool Call Style` 和 `Execution Bias` 是 OpenClaw prompt 里很关键的一组。它要求低风险例行工具调用少叙述；复杂、敏感、破坏性步骤才解释。行动请求要在当前 turn 里推进；非最终 turn 要么用工具推进，要么问一个真正阻塞的决定；弱结果要换查询、换路径、换来源；可变事实要现场检查；最终回复要带证据。
-
-对应 prompt 切片：
+<details>
+<summary>行动风格：展开原始切片</summary>
 
 ````text
 ### Tool Call Style
@@ -172,19 +162,10 @@ When approvals are required, preserve and show the full command/script exactly a
 - Longer work: brief progress update, then keep going; use background work or sub-agents when they fit.
 ````
 
-这里的语气不是“尽量主动”，而是更像执行器的硬约束。`Actionable request: act in this turn.` 这句没有留太多解释空间。
+</details>
 
-这几条把 OpenClaw 从“会聊天的助理”推成“会干活的助理”。它承认个人助理的入口很杂，但不允许 Agent 把复杂入口变成泛泛建议。
-
-这里有一个有趣的张力。OpenClaw 的 persona 层很丰富，有 `SOUL.md`、`IDENTITY.md`、`USER.md`，甚至鼓励助理形成自己的风格。但行动风格层又在压住另一端：不要表演式帮忙，不要空转，不要没有证据就收尾。
-
-这比单纯写“你要主动”更可靠。主动性如果没有证据约束，就会变成打扰；证据如果没有行动倾向，又会变成报告。OpenClaw 把两者并列写进主干 prompt，说明它在努力保持“像人一样在场”和“像工具一样可靠”的平衡。
-
-## 安全与控制层：自我更新被关进明确边界
-
-OpenClaw 有一类工具很敏感：`gateway`、`cron`、配置、更新、重启、消息发送。它们不是本地临时动作，而是会改变运行中的助理、定时器或外部通道。
-
-对应 prompt 切片。`OpenClaw Self-Update` 在原始顺序里位于 `Memory Recall` 之后，这里按功能归入控制层：
+<details>
+<summary>安全与控制：展开原始切片</summary>
 
 ````text
 ### Safety
@@ -206,19 +187,10 @@ After restart, OpenClaw pings the last active session automatically.
 If you need the current date, time, or day of week, run session_status (📊 session_status).
 ````
 
-这一层的边界感可以从 `Do not invent commands.` 这种短规则里看出来。
+</details>
 
-所以主干 prompt 里有专门的 `OpenClaw Control` 和 `OpenClaw Self-Update`。核心原则很清楚：不要发明命令；配置和重启优先走 `gateway`；自我更新只在用户明确要求时做；涉及配置路径时先查 schema；重启用 restart，而不是 stop + start。
-
-这一层很能说明 personal assistant runtime 的风险。coding agent 最怕删文件、误提交、破坏仓库；OpenClaw 还要担心误发消息、乱设提醒、改坏常驻服务、把个人上下文带到群聊里、或者在没有授权时扩张自己的能力。
-
-换句话说，OpenClaw 的安全边界不只是“哪些内容不能回答”，而是“哪些现实世界出口不能乱碰”。消息、cron、gateway、节点、浏览器、媒体生成，都是出口。
-
-## Skills 与 Skill Workshop：能力不是口头约定，而是可安装资产
-
-OpenClaw 的 `Skills` 层要求先扫描可用 skill，只有任务明显匹配时才读一个最具体的 `SKILL.md`。如果 skill 版本和上一 turn 不同，要重新读。路径不能猜，relative path 要按 skill 目录解析。
-
-对应 prompt 切片：
+<details>
+<summary>技能与技能工坊：展开原始切片</summary>
 
 ````text
 ### Skills
@@ -357,17 +329,10 @@ Do not apply, reject, or quarantine proposals manually with filesystem operation
 You may gather context first, but the durable proposal write or lifecycle change must use `skill_workshop`.
 ````
 
-这和 Claude Code 的 skill 路由有相似之处，但 OpenClaw 后面又加了一层 `Skill Workshop`。它不只是“使用 skill”，还规定了当用户要创建、更新、修订、应用、拒绝或隔离技能提案时，必须走 `skill_workshop` 工具，不能手改提案文件。
+</details>
 
-这个设计很像把 prompt 从“使用工具”推进到“治理工具”。对长期运行的个人助理来说，技能会慢慢变成它的肌肉记忆。如果技能可以随便被写入、安装、启用，系统很快会变得不可审计。Skill Workshop 把技能变更变成提案生命周期：create、update、revise、list、inspect、apply、reject、quarantine。
-
-这是一种很实用的边界：Agent 可以帮助扩展自己，但扩展必须经过可追踪的工具路径。
-
-## Memory 与 Workspace：记忆先于回答，但不能乱带出去
-
-OpenClaw 的记忆设计不是只有 `memory_search` 和 `memory_get` 两个工具。更重要的是它在 `AGENTS.md`、`MEMORY.md`、daily notes、`USER.md`、`SOUL.md` 之间做了分层。
-
-对应 prompt 切片：
+<details>
+<summary>记忆与工作区：展开原始切片</summary>
 
 ````text
 ### Memory Recall
@@ -390,17 +355,10 @@ Diagnosing issues: run `openclaw status` when possible; ask user only if blocked
 Time zone: UTC
 ````
 
-`Memory Recall` 要求在回答 prior work、decisions、dates、people、preferences、todos 之前先检索记忆，再只拉需要的片段。`AGENTS.md` 又强调：`MEMORY.md` 只在主会话加载，不能泄漏到群聊这类共享上下文。daily notes 记录原始事件，`MEMORY.md` 承担长期提炼。
+</details>
 
-这和普通聊天记忆有一个关键差别：OpenClaw 明确承认“记忆有可见范围”。不是所有记忆都能带到所有通道，不是所有个人上下文都能在群聊里用。
-
-从产品角度看，这很重要。个人助理最容易踩的坑，不是记不住，而是记得太多、用得太随意。OpenClaw 的 prompt 在提醒 Agent：你有用户的东西，不代表你可以分享用户的东西。
-
-## Project Context：人格文件不是彩蛋，是运行时输入
-
-OpenClaw 主干 prompt 里最有辨识度的部分，是它把 workspace 文件整段注入 `Project Context`。这里不只有任务规则，还有很多带人格色彩的文件：
-
-对应 prompt 切片。为了贴合文章层次，`Assistant Output Directives` 被放到下一节；这里保留 bootstrap、workspace files preamble 和完整 `Project Context`：
+<details>
+<summary>项目上下文：展开原始切片</summary>
 
 ````text
 ### Bootstrap Pending
@@ -837,31 +795,10 @@ _Good luck out there. Make it count._
 - [Agent workspace](/concepts/agent-workspace)
 ````
 
-其中 `This folder is home. Treat it that way.` 很能说明它把工作区当作“住处”来设计。
+</details>
 
-这不是普通目录说明，而是在给 Agent 一个长期驻留的空间隐喻。下面这几个文件，就是这个“家”里被注入主干 prompt 的长期对象：
-
-| 文件 | 作用 |
-| --- | --- |
-| `AGENTS.md` | 工作区总规则，规定启动、记忆、安全、群聊、工具使用。 |
-| `SOUL.md` | 定义助理的气质、边界和沟通风格。 |
-| `IDENTITY.md` | 让助理填写名字、性质、vibe、签名等身份信息。 |
-| `USER.md` | 记录用户是谁、如何称呼、时区和偏好。 |
-| `TOOLS.md` | 存放环境特定工具笔记，比如设备、SSH、语音偏好。 |
-| `BOOTSTRAP.md` | 第一次启动时的自我初始化流程。 |
-| `HEARTBEAT.md` | 周期性检查和主动提醒的轻量入口。 |
-
-这套设计很大胆，因为它把“人格”和“工程上下文”放在了同一个运行面里。很多系统会把 persona 当成系统 prompt 里的一段静态语气说明；OpenClaw 不是。它把 persona 做成 workspace 文件，允许随时间演化，也能被用户查看和编辑。
-
-好处是可塑性强。用户不是在配置一个抽象 bot，而是在和一个可逐步成形的助理协作。风险也很明显：一旦注入文件太多，prompt 体积会膨胀，指令边界会复杂，隐私上下文也更难管理。
-
-OpenClaw 的解法不是把人格层拿掉，而是继续加边界：主会话和群聊区分、外部动作要谨慎、不要代表用户说话、消息发送用工具路由、无话可说时可以 `NO_REPLY`。
-
-## Messaging 与 Heartbeat：Agent 不只回答，还要知道什么时候闭嘴
-
-OpenClaw 很重视消息通道。`Messaging` 规定当前会话回复会自动路由到源 channel，跨会话用 `sessions_send`，主动发送用 `message`，如果用消息工具交付用户可见回复，最终只返回 `NO_REPLY` 避免重复。
-
-对应 prompt 切片：
+<details>
+<summary>消息与心跳：展开原始切片</summary>
 
 ````text
 ### Assistant Output Directives
@@ -912,34 +849,10 @@ Reasoning: off (hidden unless on/stream). Toggle /reasoning; /status shows Reaso
 [Wed 2026-06-24 04:50 UTC] Reply with one short sentence.
 ````
 
-`NO_REPLY` 这个 token 很小，但它暴露了一个产品细节：OpenClaw 的最终回复不一定总是“发一条聊天消息”。有时真正的用户可见输出已经通过消息工具发出，当前 turn 只需要阻止重复投递。
+</details>
 
-源 prompt 对消息出口的边界也写得很直：`Never use exec/curl for provider messaging; OpenClaw handles all routing internally.`
-
-这类规则在普通 coding agent 里不常见，因为 coding agent 的输出面通常就是终端。OpenClaw 面对的是 Telegram、WhatsApp、Discord、Slack、Signal、iMessage 这类现实通道。现实通道里，重复回复、错发对象、在群聊乱插话，都是产品事故。
-
-`HEARTBEAT.md` 更能看出这个取向。OpenClaw 不是只等用户发消息，它还可能周期性检查 email、calendar、weather、mentions、项目状态。prompt 甚至会告诉它什么时候该伸手，什么时候该安静。
-
-这里有一个很细的工程判断：主动性被拆成两种机制。
-
-| 机制 | 适合场景 |
-| --- | --- |
-| heartbeat | 可以批处理、允许时间漂移、需要结合近期上下文的周期检查。 |
-| cron | 需要精确时间、隔离运行、一次性提醒或独立任务。 |
-
-很多 Agent 产品把“主动”当成一个开关：要么完全不主动，要么什么都提醒。OpenClaw 的 prompt 试图把主动性变成调度问题：什么任务要精确触发，什么任务适合心跳批处理，什么时候没有事就沉默。
-
-这也是 OpenClaw 比较像个人助理的地方。一个好助理不只是能说话，还要知道什么时候不说话。早期 prompt 在群聊规则里甚至直接把这个判断压成了一句：
-
-```text
-Quality > quantity.
-```
-
-## Tools 层：工具不是插件列表，而是一组现实出口
-
-OpenClaw 最新可见版本的工具区有 30 多个工具，大致可以分成几类：
-
-对应 prompt 切片。这里是完整工具 schema，所以会明显比前面的层更长：
+<details>
+<summary>工具协议：展开原始切片</summary>
 
 ````text
 # Tools
@@ -4219,71 +4132,4 @@ Write content to a file. Creates the file if it doesn't exist, overwrites if it 
 ```
 ````
 
-| 工具类别 | 工具 |
-| --- | --- |
-| 文件与 shell | `read`、`write`、`edit`、`apply_patch`、`exec`、`process`、`dir_fetch`、`dir_list`、`file_fetch`、`file_write` |
-| Web 与浏览器 | `web_search`、`web_fetch`、`browser` |
-| 多媒体与画布 | `canvas`、`image`、`image_generate`、`video_generate`、`pdf`、`tts` |
-| 设备与节点 | `nodes` |
-| 消息与调度 | `message`、`cron` |
-| 运行时控制 | `gateway`、`session_status`、`create_goal`、`get_goal`、`update_goal` |
-| 记忆 | `memory_search`、`memory_get` |
-| 子会话与多代理 | `agents_list`、`sessions_list`、`sessions_history`、`sessions_send`、`sessions_spawn`、`sessions_yield`、`subagents` |
-| 技能治理 | `skill_workshop` |
-
-这些工具的共同点，不是都服务代码，而是都接到了现实世界的不同面：文件系统、网页、浏览器、手机节点、聊天应用、定时任务、语音、图片、视频、PDF、后台进程、子代理。
-
-所以 OpenClaw 的工具协议不像“给模型加几个函数”那么简单。每个工具都是一个出口。出口越多，越需要规则说明：用户能不能看到、是否会发到外部、是否会改变常驻状态、是否应该等待、是否应该用子会话、是否应该保持沉默。
-
-OpenClaw 主干 prompt 之所以长，很大一部分原因就在这里。它不是为了让模型“知道工具名字”，而是为了让模型知道工具背后的社交、权限和运行时后果。
-
-## 和 Claude Code 的差异
-
-把 OpenClaw 和 Claude Code 放在一起看，差异会很清楚。
-
-| 维度 | Claude Code | OpenClaw |
-| --- | --- | --- |
-| 默认身份 | 软件工程任务里的交互式 Agent。 | 运行在 OpenClaw 里的 personal assistant。 |
-| 核心场景 | 仓库、代码、shell、工具、任务、workflow。 | 工作区、个人记忆、消息通道、设备、媒体、心跳、后台任务。 |
-| 记忆形态 | 更强调文件式 memory 的创建、去重、索引和验证。 | 更强调 workspace 文件、daily notes、长期记忆和通道隔离。 |
-| 主动性 | 通过任务、监控、wake、自动化等进入长任务。 | 通过 heartbeat、cron、message 和 channel routing 进入用户生活流。 |
-| 扩展能力 | Skill 和工具协议偏工程执行。 | Skill Workshop 把技能变更做成治理流程。 |
-| 最大风险 | 误改代码、误用 shell、破坏仓库或外部服务。 | 误发消息、泄漏个人上下文、乱设定时器、改坏常驻助理。 |
-
-这不是谁更高级的问题，而是产品形态不同。Claude Code 的主干 prompt 在回答：“怎样让模型可靠地在代码工程里行动？”OpenClaw 的主干 prompt 在回答：“怎样让模型长期、安全、可塑地存在于一个人的数字环境里？”
-
-这两个问题重叠，但不相同。
-
-## 对 Agent 设计的启发
-
-OpenClaw 最值得借的，不是具体某个工具，而是它把“用户侧 Agent”拆成了几层可管理的对象。
-
-一个长期个人助理型 Agent，至少要回答这些问题：
-
-| 问题 | 对应层 |
-| --- | --- |
-| 它是谁？ | 身份层、`SOUL.md`、`IDENTITY.md` |
-| 它在帮谁？ | `USER.md`、memory |
-| 它住在哪里？ | `Workspace`、`Project Context` |
-| 它能从哪些通道收发消息？ | `Messaging`、message tool、reply directives |
-| 它能不能主动？ | heartbeat、cron、wake |
-| 它怎样避免泄漏个人上下文？ | 主会话/群聊边界、memory recall 规则 |
-| 它怎样扩展能力？ | Skills、Skill Workshop |
-| 它怎样控制自身运行时？ | gateway、self-update、config schema |
-| 它怎样处理长任务？ | sessions、subagents、process、goals |
-
-这也是 OpenClaw prompt 比较“厚”的原因。个人助理不是一次性对话产品，它需要长期状态、社会边界、外部出口、主动性和可恢复任务。只靠一句“你是一个有帮助的助手”完全不够。
-
-更准确地说，OpenClaw 不是在写一个漂亮 prompt，而是在用 prompt 描述一个助理如何生活在宿主系统里。
-
-## 边界和警惕
-
-OpenClaw 这类设计有很强的吸引力，也有明显成本。
-
-第一，prompt 体积会持续膨胀。人格文件、工作区规则、动态上下文、工具 schema、消息规则、心跳说明都很有用，但每一层都会占上下文。结构越全，越需要定期整理，否则主干会从“运行时协议”变成“运行时仓库大杂烩”。
-
-第二，个人上下文越多，越要重视隔离。`USER.md`、`MEMORY.md`、daily notes、消息通道和群聊边界一旦混在一起，就会出现很难挽回的信任事故。OpenClaw prompt 已经在强调主会话和共享上下文的差异，但真正可靠还要靠实现层、权限层和 UI 层一起兜住。
-
-第三，主动性需要克制。Heartbeat 和 cron 很强，但强不等于应该到处用。一个会周期性醒来的 Agent，如果没有明确触发条件、安静规则和用户可控面，很快会从“帮忙”变成“打扰”。
-
-OpenClaw 主干 prompt 最值得记住的判断是：个人 Agent 的难点不是“能不能多接几个工具”，而是“能不能在多通道、多记忆、多出口的环境里保持边界”。它把人格、记忆、消息、调度、媒体、设备和子会话都放进主干 prompt，赌的是一种更长期的助理形态。这个方向很有想象力，但也更考验治理能力。
+</details>

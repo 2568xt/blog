@@ -39,7 +39,6 @@ const { Content, headings } = await render(post);
         <time datetime={post.data.date.toISOString()}>
           {formatDisplayDate(post.data.date)}
         </time>
-        <span>#{post.id}</span>
       </div>
       <h1>{post.data.title}</h1>
       <p class="post-hero__summary">{post.data.summary}</p>

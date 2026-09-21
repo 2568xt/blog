@@ -24,6 +24,10 @@ const canonicalUrl = Astro.site
   : undefined;
 const navigation = [
   { href: homePath(), label: "首页" },
+  ...(homeTheme ? [
+    { href: "#projects", label: "作品" },
+    { href: "#writing", label: "文章" },
+  ] : []),
   { href: tagsPath(), label: "标签" },
 ];
 ---
@@ -54,8 +58,8 @@ const navigation = [
     <header class="site-header site-header--quiet-product">
       <div class="site-shell site-header__inner site-header__inner--quiet-product">
         <a class="site-brand site-brand--quiet-product" href={homePath()}>
-          <span class="site-brand__name">{homeTheme ? "Notes" : siteConfig.siteTitle}</span>
-          {!homeTheme && <span class="site-brand__tagline">Notes</span>}
+          <span class="site-brand__name">{siteConfig.siteTitle}</span>
+          <span class="site-brand__tagline">{homeTheme ? "/ Notes" : "Notes"}</span>
         </a>
         <nav class="site-nav site-nav--quiet-product" aria-label="主导航">
           {navigation.map((item) => (
@@ -72,6 +76,7 @@ const navigation = [
     <footer class="site-footer site-footer--quiet-product">
       <div class="site-shell site-footer__inner site-footer__inner--quiet-product">
         <p>© {new Date().getFullYear()}</p>
+        {homeTheme && <a class="home-back-top" href="#home-title">回到顶部 <span aria-hidden="true">↑</span></a>}
       </div>
     </footer>
   </body>

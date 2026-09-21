@@ -4,266 +4,177 @@ import { getCollection } from "astro:content";
 import PostList from "../components/PostList.astro";
 import { siteConfig } from "../config/site";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { collectEntryTagSummaries, getPublishedEntries } from "../lib/posts";
-import { archivePath, homePath, tagPath, withBase } from "../lib/routing";
+import { getPublishedEntries } from "../lib/posts";
+import { archivePath, homePath, withBase } from "../lib/routing";
 import "../styles/home.css";
 
 const posts = getPublishedEntries(await getCollection("posts"));
-const leadingTags = collectEntryTagSummaries(posts);
+const rincodeUrl = "https://github.com/2568xt/RinCode";
 ---
 
-<BaseLayout canonicalPath={homePath()} homeTheme>
+<BaseLayout
+  canonicalPath={homePath()}
+  description="Rin 的个人主页。记录 AI 与 Agent 的学习、实践与思考，构建自然语言协作编码工具 RinCode。"
+  homeTheme
+>
   <div class="home-page">
     <section class="home-hero" aria-labelledby="home-title">
-      <div class="home-hero__inner">
-        <div class="home-hero__content">
-          <h1 id="home-title" class="home-hero__brand">{siteConfig.siteTitle}</h1>
-          <div class="home-hero__intro-text">
-            <p class="home-hero__statement">
-              我在这里记录关于 AI 与 Agent 的学习、实践与思考。
-            </p>
-            <p class="home-hero__keywords">
-              记忆 / 评测 / 工具调用 / 工作流
-            </p>
-          </div>
-          <div class="home-hero__actions">
-            <a href="#writing" class="home-hero__cta">阅读文章</a>
-            <nav class="home-hero__links" aria-label="快捷入口">
-              <a href={archivePath()} class="home-hero__link">
-                文章档案 <span class="home-arrow" aria-hidden="true">↗</span>
-              </a>
-            </nav>
-          </div>
-        </div>
-        <div class="home-hero__visual">
-          <div class="avatar-scroll-layer">
-            <div class="avatar-drag-layer">
-              <div class="avatar-float-layer">
-                <img
-                  src={withBase("images/rin-chrome-head-v1.png")}
-                  alt="Rin"
-                  width="380"
-                  height="380"
-                  loading="eager"
-                  decoding="async"
-                  class="avatar-image"
-                  draggable="false"
-                />
-                <canvas class="avatar-canvas" aria-hidden="true"></canvas>
-              </div>
-            </div>
+      <div class="home-hero__content">
+        <h1 id="home-title">{siteConfig.siteTitle}</h1>
+        <p class="home-hero__statement">我在这里记录关于 AI 与 Agent 的学习、实践与思考。</p>
+        <p class="home-hero__keywords">记忆 / 评测 / 工具调用 / 工作流</p>
+        <a class="home-text-link" href="https://github.com/2568xt" target="_blank" rel="noopener noreferrer">
+          GitHub <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+      <div class="home-hero__visual">
+        <div class="avatar-drag-layer">
+          <div class="avatar-float-layer">
+            <img
+              src={withBase("images/rin-chrome-head-v1.png")}
+              alt="Rin 的银色头像"
+              width="380"
+              height="380"
+              loading="eager"
+              decoding="async"
+              class="avatar-image"
+              draggable="false"
+            />
+            <canvas class="avatar-canvas" aria-hidden="true"></canvas>
           </div>
         </div>
       </div>
+      <a class="home-hero__scroll-cue" href="#projects">向下探索 <span aria-hidden="true">↓</span></a>
     </section>
 
-    <div class="home-divider" aria-hidden="true"></div>
-
-    <section class="home-topics-strip" aria-label="核心主题">
-      <div class="home-topics-strip__inner">
-        <span class="home-topics__label">聚焦主题</span>
-        <div class="home-topic-list">
-          {leadingTags.map((summary) => (
-            <a href={tagPath(summary.tag)} class="home-topic-link">
-              <span class="home-topic-hash">#</span>{summary.tag}
-              <span class="home-topic-count">{summary.count}</span>
-            </a>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <section id="writing" class="home-writing" aria-labelledby="writing-title" tabindex="-1">
-      <header class="home-writing__header">
-        <h2 id="writing-title">全部文章</h2>
-        <p class="home-writing__count">{posts.length} 篇已发布</p>
+    <section id="projects" class="home-section home-projects" aria-labelledby="projects-title" tabindex="-1">
+      <header class="home-section-label">
+        <h2 id="projects-title">项目</h2>
+        <span>Projects</span>
       </header>
-      <PostList posts={posts} />
+      <article class="rincode-project" aria-labelledby="rincode-title">
+        <div class="rincode-project__header">
+          <img class="rincode-project__mark" src={withBase("images/rincode/mark.svg")} alt="" width="40" height="40" />
+          <div>
+            <h3 id="rincode-title"><a href={rincodeUrl} target="_blank" rel="noopener noreferrer">RinCode <span aria-hidden="true">↗</span></a></h3>
+            <p>自然语言协作的编码 Agent</p>
+          </div>
+          <span class="rincode-project__type">开源项目</span>
+        </div>
+        <p class="rincode-project__description">在项目里读代码、改文件、运行测试。<br />从桌面到终端，把对话和执行放在一起。</p>
+        <figure class="rincode-preview">
+          <button class="rincode-preview__button" type="button" aria-label="放大 RinCode 桌面界面" aria-haspopup="dialog" data-preview-open>
+            <img
+              src={withBase("images/rincode/desktop.png")}
+              alt="RinCode 桌面界面：左侧按项目组织对话，右侧显示任务回复与输入区"
+              width="1440"
+              height="888"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="rincode-preview__hint" aria-hidden="true">查看大图 ↗</span>
+          </button>
+          <figcaption>桌面界面，使用演示项目与示例对话。</figcaption>
+        </figure>
+        <div class="rincode-project__footer">
+          <span>macOS · Terminal</span>
+          <div>
+            <a class="home-text-link" href={rincodeUrl} target="_blank" rel="noopener noreferrer">源代码 <span aria-hidden="true">↗</span></a>
+            <a class="home-text-link" href={`${rincodeUrl}#快速开始`} target="_blank" rel="noopener noreferrer">上手指南 <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+      </article>
     </section>
+
+    <section id="writing" class="home-section home-writing" aria-labelledby="writing-title" tabindex="-1">
+      <div class="home-section-label">
+        <h2 id="writing-title">文章</h2>
+        <span>Writing</span>
+      </div>
+      <div class="home-writing__content">
+        <header class="home-writing__header">
+          <p class="home-writing__count">{posts.length} 篇已发布</p>
+          <a href={archivePath()} class="home-text-link">文章档案 <span aria-hidden="true">↗</span></a>
+        </header>
+        <PostList posts={posts} />
+      </div>
+    </section>
+
+    <dialog class="rincode-lightbox" aria-labelledby="rincode-preview-title">
+      <div class="rincode-lightbox__header">
+        <h2 id="rincode-preview-title">RinCode <span>桌面界面 · 演示项目</span></h2>
+        <form method="dialog"><button type="submit" aria-label="关闭预览">关闭 <span aria-hidden="true">×</span></button></form>
+      </div>
+      <img src={withBase("images/rincode/desktop.png")} alt="RinCode 桌面完整预览，展示项目会话树、对话内容、模型选择与任务输入区" width="1440" height="888" loading="lazy" />
+    </dialog>
   </div>
 
   <script>
-    import { initAvatarRipple, type AvatarRippleController } from "../lib/avatar-ripple";
-
-    let cleanupPreviousAnimations: (() => void) | null = null;
-
-    function initHomeAnimations() {
-      if (cleanupPreviousAnimations) {
-        cleanupPreviousAnimations();
-        cleanupPreviousAnimations = null;
+    const preview = document.querySelector<HTMLDialogElement>(".rincode-lightbox");
+    document.querySelector<HTMLButtonElement>("[data-preview-open]")?.addEventListener("click", () => preview?.showModal());
+    preview?.addEventListener("click", (event) => {
+      if (event.target !== preview) return;
+      const bounds = preview.getBoundingClientRect();
+      if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) {
+        preview.close();
       }
+    });
+  </script>
 
-      const homePage = document.querySelector<HTMLElement>(".home-page");
-      if (!homePage) return;
+  <script>
+    import { initAvatarRipple } from "../lib/avatar-ripple";
 
-      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const abortController = new AbortController();
-      const signal = abortController.signal;
+    const hero = document.querySelector<HTMLElement>(".home-hero");
+    const visual = document.querySelector<HTMLElement>(".home-hero__visual");
+    const dragLayer = document.querySelector<HTMLElement>(".avatar-drag-layer");
+    const floatLayer = document.querySelector<HTMLElement>(".avatar-float-layer");
+    const canvas = document.querySelector<HTMLCanvasElement>(".avatar-canvas");
+    const avatar = document.querySelector<HTMLImageElement>(".avatar-image");
 
-      const heroSection = homePage.querySelector<HTMLElement>(".home-hero");
-      const heroBrand = homePage.querySelector<HTMLElement>(".home-hero__brand");
-      const heroIntroText = homePage.querySelector<HTMLElement>(".home-hero__intro-text");
-      const heroVisual = homePage.querySelector<HTMLElement>(".home-hero__visual");
-      const avatarScrollLayer = homePage.querySelector<HTMLElement>(".avatar-scroll-layer");
-      const avatarDragLayer = homePage.querySelector<HTMLElement>(".avatar-drag-layer");
-      const avatarFloatLayer = homePage.querySelector<HTMLElement>(".avatar-float-layer");
-      const avatarCanvas = homePage.querySelector<HTMLCanvasElement>(".avatar-canvas");
-      const avatarImg = homePage.querySelector<HTMLImageElement>(".avatar-image");
+    if (hero && visual && dragLayer && canvas && avatar) {
+      const ripple = initAvatarRipple(canvas, avatar, visual, dragLayer);
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+      const events = new AbortController();
+      let visible = true;
+      let scrollFrame: number | null = null;
 
-      let rippleController: AvatarRippleController | null = null;
-      if (avatarCanvas && avatarImg && heroVisual && avatarDragLayer) {
-        rippleController = initAvatarRipple(avatarCanvas, avatarImg, heroVisual, avatarDragLayer);
-      }
-
-      let heroObserver: IntersectionObserver | null = null;
-      let articleObserver: IntersectionObserver | null = null;
-      let scrollRafId: number | null = null;
-
-      cleanupPreviousAnimations = () => {
-        abortController.abort();
-        if (rippleController) {
-          rippleController.destroy();
-          rippleController = null;
-        }
-        if (heroObserver) {
-          heroObserver.disconnect();
-          heroObserver = null;
-        }
-        if (articleObserver) {
-          articleObserver.disconnect();
-          articleObserver = null;
-        }
-        if (scrollRafId !== null) {
-          cancelAnimationFrame(scrollRafId);
-          scrollRafId = null;
-        }
+      const updateScroll = () => {
+        scrollFrame = null;
+        if (!visible && !reducedMotion.matches) return;
+        const scroll = reducedMotion.matches ? 0 : Math.max(0, window.scrollY);
+        const textDistance = window.innerWidth <= 760 ? 240 : 360;
+        hero.style.setProperty("--hero-progress", Math.min(1, scroll / textDistance).toFixed(4));
+        hero.style.setProperty("--avatar-progress", Math.min(1, scroll / 500).toFixed(4));
       };
 
-      // Visibility state for hero: pause updates & floating when scrolled out of viewport
-      let heroVisible = true;
-
-      if (!prefersReducedMotion) {
-        if (heroSection && "IntersectionObserver" in window) {
-          heroObserver = new IntersectionObserver(
-            (entries) => {
-              for (const entry of entries) {
-                heroVisible = entry.isIntersecting;
-                rippleController?.setHeroVisible(heroVisible);
-                if (avatarFloatLayer) {
-                  avatarFloatLayer.style.animationPlayState = heroVisible ? "running" : "paused";
-                }
-                if (heroVisible) {
-                  updateHeroOnScroll();
-                }
-              }
-            },
-            { threshold: 0 }
-          );
-          heroObserver.observe(heroSection);
-        } else if (avatarFloatLayer) {
-          // 无 IntersectionObserver 时 JS 显式启用
-          avatarFloatLayer.style.animationPlayState = "running";
-        }
-      }
-
-      // 1. Hero Dynamic Scroll Transformations
-      const updateHeroOnScroll = () => {
-        if (!heroVisible && window.scrollY > 600) {
-          return;
-        }
-
-        const scrollY = window.scrollY || window.pageYOffset || 0;
-        const isMobile = window.innerWidth <= 760;
-
-        // Brand & Intro: up to 60px/30px translate, 0.9/0.95 scale, 0.3/0.5 opacity over 360px/240px
-        if (heroBrand && heroIntroText) {
-          const brandScrollDistance = isMobile ? 240 : 360;
-          const brandMaxTranslateY = isMobile ? 30 : 60;
-          const brandMinScale = isMobile ? 0.95 : 0.9;
-          const introMinOpacity = isMobile ? 0.5 : 0.3;
-
-          const pBrand = Math.min(1, Math.max(0, scrollY / brandScrollDistance));
-          const curBrandY = -pBrand * brandMaxTranslateY;
-          const curBrandScale = 1 - pBrand * (1 - brandMinScale);
-          const curIntroOpacity = 1 - pBrand * (1 - introMinOpacity);
-
-          heroBrand.style.transform = `translate3d(0, ${curBrandY.toFixed(1)}px, 0) scale(${curBrandScale.toFixed(3)})`;
-          heroIntroText.style.opacity = curIntroOpacity.toFixed(3);
-        }
-
-        // Avatar Scroll Layer: over first 500px, desktop moves up 100px and scales to 0.78; mobile halved
-        if (avatarScrollLayer) {
-          const pAvatar = Math.min(1, Math.max(0, scrollY / 500));
-          const avatarMaxTranslateY = isMobile ? 50 : 100;
-          const avatarScaleDelta = isMobile ? 0.11 : 0.22; // 1 - 0.78 = 0.22 desktop, halved = 0.11 mobile (scale to 0.89)
-
-          const curAvatarY = -pAvatar * avatarMaxTranslateY;
-          const curAvatarScale = 1 - pAvatar * avatarScaleDelta;
-
-          avatarScrollLayer.style.transform = `translate3d(0, ${curAvatarY.toFixed(1)}px, 0) scale(${curAvatarScale.toFixed(4)})`;
-        }
+      const scheduleScroll = () => {
+        if (scrollFrame === null) scrollFrame = requestAnimationFrame(updateScroll);
       };
 
-      if (!prefersReducedMotion) {
-        let scrollTicking = false;
+      const updateMotion = () => {
+        if (floatLayer) {
+          floatLayer.style.animationPlayState = visible && !reducedMotion.matches ? "running" : "paused";
+        }
+        scheduleScroll();
+      };
 
-        const onScroll = () => {
-          if (!scrollTicking) {
-            scrollTicking = true;
-            scrollRafId = requestAnimationFrame(() => {
-              scrollRafId = null;
-              updateHeroOnScroll();
-              scrollTicking = false;
-            });
-          }
-        };
+      const observer = new IntersectionObserver(([entry]) => {
+        visible = entry.isIntersecting;
+        ripple?.setHeroVisible(visible);
+        updateMotion();
+      });
+      observer.observe(hero);
+      window.addEventListener("scroll", scheduleScroll, { passive: true, signal: events.signal });
+      window.addEventListener("resize", scheduleScroll, { passive: true, signal: events.signal });
+      reducedMotion.addEventListener("change", updateMotion, { signal: events.signal });
+      updateMotion();
 
-        window.addEventListener("scroll", onScroll, { passive: true, signal });
-        window.addEventListener("resize", onScroll, { passive: true, signal });
-        updateHeroOnScroll();
-      }
-
-      // 3. Articles Scroll Reveal: 12px fade-in over 400ms
-      const postRows = homePage.querySelectorAll<HTMLElement>(".post-row");
-      if (!postRows.length) return;
-
-      // Reveal row immediately on keyboard focusin
-      homePage.addEventListener(
-        "focusin",
-        (e) => {
-          const target = e.target as HTMLElement | null;
-          const row = target?.closest<HTMLElement>(".post-row");
-          if (row && !row.classList.contains("is-revealed")) {
-            row.classList.add("is-revealed");
-          }
-        },
-        { signal }
-      );
-
-      if (!prefersReducedMotion && "IntersectionObserver" in window) {
-        homePage.classList.add("has-scroll-reveal");
-
-        articleObserver = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                entry.target.classList.add("is-revealed");
-                articleObserver?.unobserve(entry.target);
-              }
-            });
-          },
-          {
-            root: null,
-            threshold: 0.05,
-            rootMargin: "0px 0px -20px 0px",
-          }
-        );
-
-        postRows.forEach((row) => articleObserver?.observe(row));
-      }
+      document.addEventListener("astro:before-swap", () => {
+        events.abort();
+        if (scrollFrame !== null) cancelAnimationFrame(scrollFrame);
+        observer.disconnect();
+        ripple?.destroy();
+      }, { once: true });
     }
-
-    initHomeAnimations();
-    document.addEventListener("astro:page-load", initHomeAnimations);
   </script>
 </BaseLayout>

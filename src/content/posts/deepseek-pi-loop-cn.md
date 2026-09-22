@@ -1,6 +1,6 @@
 ---
 title: DeepSeek Harness 与 Pi：Agent Loop 到底在哪一层结束
-date: 2026-09-01T13:00:00+08:00
+date: 2026-09-01T00:25:00+08:00
 summary: 从模型停止、工具续跑到 Goal 调度，拆开 DeepSeek Harness 与 Pi 的循环结束条件，以及截断、取消和恢复时各自守住的边界。
 tags:
   - harness-engineering

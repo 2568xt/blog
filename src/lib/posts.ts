@@ -88,7 +88,7 @@ export function groupEntriesByYear(posts: PostEntry[]) {
   const grouped = new Map<string, PostEntry[]>();
 
   for (const post of getPublishedEntries(posts)) {
-    const year = String(new Date(post.data.date).getFullYear());
+    const year = formatDisplayDate(post.data.date).slice(0, 4);
     const currentPosts = grouped.get(year) ?? [];
     currentPosts.push(post);
     grouped.set(year, currentPosts);
@@ -100,11 +100,13 @@ export function groupEntriesByYear(posts: PostEntry[]) {
   }));
 }
 
-export function formatDisplayDate(date: Date | string): string {
-  const value = new Date(date);
-  const year = value.getFullYear();
-  const month = String(value.getMonth() + 1).padStart(2, "0");
-  const day = String(value.getDate()).padStart(2, "0");
+const publicationDateFormatter = new Intl.DateTimeFormat("en-CA", {
+  timeZone: "Asia/Shanghai",
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+});
 
-  return `${year}-${month}-${day}`;
+export function formatDisplayDate(date: Date | string): string {
+  return publicationDateFormatter.format(new Date(date));
 }

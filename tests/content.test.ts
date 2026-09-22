@@ -3,7 +3,10 @@ import { describe, expect, it } from "vitest";
 import { postFrontmatterSchema } from "../src/content/schema";
 import {
   collectTagSummaries,
+  formatDisplayDate,
+  groupEntriesByYear,
   getPublishedPosts,
+  type PostEntry,
   type PostMeta,
 } from "../src/lib/posts";
 import { postPath, tagPath, withBase } from "../src/lib/routing";
@@ -99,6 +102,25 @@ describe("collectTagSummaries", () => {
       { tag: "astro", count: 1 },
       { tag: "notes", count: 1 },
     ]);
+  });
+});
+
+describe("publication dates", () => {
+  it("displays late-night publication dates in Shanghai time", () => {
+    expect(formatDisplayDate("2026-09-01T00:25:00+08:00")).toBe("2026-09-01");
+    expect(formatDisplayDate(new Date("2026-09-05T00:35:00+08:00"))).toBe(
+      "2026-09-05",
+    );
+    expect(formatDisplayDate("2026-05-31")).toBe("2026-05-31");
+  });
+
+  it("groups a New Year publication under its Shanghai calendar year", () => {
+    const post = {
+      id: "new-year",
+      data: { date: new Date("2027-01-01T00:15:00+08:00"), draft: false },
+    } as PostEntry;
+
+    expect(groupEntriesByYear([post])).toEqual([{ year: "2027", entries: [post] }]);
   });
 });
 

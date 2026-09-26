@@ -62,19 +62,25 @@ const rincodeUrl = "https://github.com/2568xt/RinCode";
           <span class="rincode-project__type">开源项目</span>
         </div>
         <p class="rincode-project__description">在项目里读代码、改文件、运行测试。<br />从桌面到终端，把对话和执行放在一起。</p>
-        <figure class="rincode-preview">
-          <button class="rincode-preview__button" type="button" aria-label="放大 RinCode 桌面界面" aria-haspopup="dialog" data-preview-open>
-            <img
-              src={withBase("images/rincode/desktop.png")}
-              alt="RinCode 桌面界面：左侧按项目组织对话，右侧显示任务回复与输入区"
-              width="1440"
-              height="888"
-              loading="lazy"
-              decoding="async"
-            />
-            <span class="rincode-preview__hint" aria-hidden="true">查看大图 ↗</span>
-          </button>
-          <figcaption>桌面界面，使用演示项目与示例对话。</figcaption>
+        <figure class="rincode-film">
+          <video
+            src={withBase("videos/rincode/promo-1080p.mp4")}
+            poster={withBase("videos/rincode/poster.png")}
+            width="1920"
+            height="1080"
+            controls
+            playsinline
+            preload="none"
+            aria-label="RinCode 宣传片：从一句想法，到下一次提交。"
+          >
+            <a href={withBase("videos/rincode/promo-1080p.mp4")}>直接打开 RinCode 宣传片</a>
+          </video>
+          <figcaption>
+            <span>宣传片 · 00:40</span>
+            <button class="home-text-link rincode-film__preview" type="button" aria-label="查看 RinCode 桌面界面" aria-haspopup="dialog" data-preview-open>
+              桌面界面 <span aria-hidden="true">↗</span>
+            </button>
+          </figcaption>
         </figure>
         <div class="rincode-project__footer">
           <span>macOS · Terminal</span>
@@ -107,6 +113,7 @@ const rincodeUrl = "https://github.com/2568xt/RinCode";
       </div>
       <img src={withBase("images/rincode/desktop.png")} alt="RinCode 桌面完整预览，展示项目会话树、对话内容、模型选择与任务输入区" width="1440" height="888" loading="lazy" />
     </dialog>
+
   </div>
 
   <script>

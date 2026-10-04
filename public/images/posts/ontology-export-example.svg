@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 760" width="640" height="760" role="img" aria-labelledby="title desc">
+  <title id="title">一次报表下载涉及四个不同对象</title>
+  <desc id="desc">假设案例：租户 T-A 的账号 U-7 发起任务 E-204。任务成功生成文件 F-88，文件仍存在，但用于下载的链接 L-9 已过期。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="none" stroke="#777" stroke-width="1.4"/></marker>
+  </defs>
+  <rect width="640" height="760" fill="#faf9f6"/>
+  <g font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" text-anchor="middle">
+    <text x="320" y="48" font-size="24" fill="#656565">假设案例 · 对象及其查询结果</text>
+    <g fill="#fff" stroke="#bcbab5" stroke-width="1.5">
+      <rect x="70" y="80" width="500" height="106" rx="8"/>
+      <rect x="70" y="248" width="500" height="106" rx="8"/>
+      <rect x="70" y="416" width="500" height="106" rx="8"/>
+      <rect x="70" y="584" width="500" height="106" rx="8"/>
+    </g>
+    <g font-size="29" fill="#222">
+      <text x="320" y="123">账号 U-7</text>
+      <text x="320" y="291">导出任务 E-204</text>
+      <text x="320" y="459">文件 F-88</text>
+      <text x="320" y="627">下载链接 L-9</text>
+    </g>
+    <g font-size="24" fill="#606060">
+      <text x="320" y="160">所属租户：T-A</text>
+      <text x="320" y="328">状态：生成成功</text>
+      <text x="320" y="496">状态：仍在保留期内</text>
+      <text x="320" y="664">状态：链接已过期</text>
+    </g>
+    <g stroke="#777" stroke-width="2" marker-end="url(#arrow)">
+      <path d="M320 191V237"/>
+      <path d="M320 359V405"/>
+      <path d="M320 527V573"/>
+    </g>
+    <g font-size="23" fill="#606060" text-anchor="start">
+      <text x="350" y="223">发起</text>
+      <text x="350" y="391">生成</text>
+      <text x="350" y="559">通过链接访问</text>
+    </g>
+    <text x="320" y="735" font-size="23" fill="#555">任务成功 ≠ 此刻可以下载</text>
+  </g>
+</svg>
